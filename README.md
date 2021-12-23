@@ -2,7 +2,7 @@
 
 ## Wiki
 
-* TBD
+* [lyes-s/network-device-inventory/wiki](https://github.com/lyes-s/network-device-inventory/wiki)
 
 ## Enhancements
 
