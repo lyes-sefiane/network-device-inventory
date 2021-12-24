@@ -11,4 +11,5 @@ CREATE TABLE IF NOT EXISTS connection (
     network_device_ipaddress varchar(255) NOT NULL REFERENCES network_device(ipaddress) ON UPDATE CASCADE ON DELETE CASCADE,
     neighbor_ipaddress varchar(255) NOT NULL REFERENCES neighbor(ipaddress) ON UPDATE CASCADE ON DELETE CASCADE,
     cost INTEGER NOT NULL,
+    UNIQUE(network_device_ipaddress, neighbor_ipaddress),
     CONSTRAINT connection_pk PRIMARY KEY(network_device_ipaddress, neighbor_ipaddress));
