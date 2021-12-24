@@ -1,4 +1,4 @@
-# Network Device Inventory Microservice
+# Network Device Inventory Restful Web Service
 
 ## Wiki
 
