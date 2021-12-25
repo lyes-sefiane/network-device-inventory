@@ -28,8 +28,7 @@ public class NetworkDevice implements Serializable {
     @Convert(converter = ElementTypeConverter.class)
     private ElementType elementType;
 
-    // Default Fetch : Lazy
-    @OneToMany(mappedBy = "networkDevice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "networkDevice", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Connection> connections = new HashSet<>();
 
     public NetworkDevice(){
