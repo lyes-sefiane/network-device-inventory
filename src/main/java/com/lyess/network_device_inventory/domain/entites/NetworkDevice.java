@@ -2,6 +2,7 @@ package com.lyess.network_device_inventory.domain.entites;
 
 import com.lyess.network_device_inventory.domain.enums.ElementType;
 import com.lyess.network_device_inventory.domain.enums.converter.ElementTypeConverter;
+import lombok.Builder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "network_device")
+@Builder
 public class NetworkDevice implements Serializable {
 
     @Id

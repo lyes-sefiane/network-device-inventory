@@ -36,6 +36,10 @@ public enum ElementType {
         return value;
     }
 
+    public static Map<String, ElementType> getMapOfEnumsByValue() {
+        return mapOfEnumsByValue;
+    }
+
     /**
      * Get Enum By Value
      *
