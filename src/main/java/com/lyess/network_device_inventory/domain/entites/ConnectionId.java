@@ -13,35 +13,35 @@ import java.util.Objects;
 @Embeddable
 public class ConnectionId implements Serializable {
 
-    @Column(name = "network_device_ip_address")
-    private String network_device_ip_address;
+    @Column(name = "network_device_ipaddress")
+    private String network_device_ipaddress;
 
-    @Column(name = "neighbor_ip_address")
-    private String neighbor_ip_address;
+    @Column(name = "neighbor_ipaddress")
+    private String neighbor_ipaddress;
 
     public ConnectionId() {
         //
     }
 
-    public ConnectionId(String network_device_ip_address, String neighbor_ip_address) {
-        this.network_device_ip_address = network_device_ip_address;
-        this.neighbor_ip_address = neighbor_ip_address;
+    public ConnectionId(String network_device_ipaddress, String neighbor_ipaddress) {
+        this.network_device_ipaddress = network_device_ipaddress;
+        this.neighbor_ipaddress = neighbor_ipaddress;
     }
 
-    public String getNetwork_device_ip_address() {
-        return network_device_ip_address;
+    public String getNetwork_device_ipaddress() {
+        return network_device_ipaddress;
     }
 
-    public void setNetwork_device_ip_address(String network_device_ip_address) {
-        this.network_device_ip_address = network_device_ip_address;
+    public void setNetwork_device_ipaddress(String network_device_ipaddress) {
+        this.network_device_ipaddress = network_device_ipaddress;
     }
 
-    public String getNeighbor_ip_address() {
-        return neighbor_ip_address;
+    public String getNeighbor_ipaddress() {
+        return neighbor_ipaddress;
     }
 
-    public void setNeighbor_ip_address(String neighbor_ip_address) {
-        this.neighbor_ip_address = neighbor_ip_address;
+    public void setNeighbor_ipaddress(String neighbor_ipaddress) {
+        this.neighbor_ipaddress = neighbor_ipaddress;
     }
 
     @Override
@@ -49,19 +49,19 @@ public class ConnectionId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ConnectionId that = (ConnectionId) o;
-        return network_device_ip_address.equals(that.network_device_ip_address) && neighbor_ip_address.equals(that.neighbor_ip_address);
+        return network_device_ipaddress.equals(that.network_device_ipaddress) && neighbor_ipaddress.equals(that.neighbor_ipaddress);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(network_device_ip_address, neighbor_ip_address);
+        return Objects.hash(network_device_ipaddress, neighbor_ipaddress);
     }
 
     @Override
     public String toString() {
         return "ConnectionId{" +
-                "network_device_ip_address='" + network_device_ip_address + '\'' +
-                ", neighbor_ip_address='" + neighbor_ip_address + '\'' +
+                "network_device_ipaddress='" + network_device_ipaddress + '\'' +
+                ", neighbor_ipaddress='" + neighbor_ipaddress + '\'' +
                 '}';
     }
 }

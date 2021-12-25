@@ -19,13 +19,13 @@ public class Connection implements Serializable {
     private ConnectionId connectionId;
 
     @ManyToOne
-    @MapsId("network_device_ip_address")
-    @JoinColumn(name = "network_device_ip_address")
+    @MapsId("network_device_ipaddress")
+    @JoinColumn(name = "network_device_ipaddress")
     private NetworkDevice networkDevice;
 
     @ManyToOne
-    @MapsId("neighbor_ip_address")
-    @JoinColumn(name = "neighbor_ip_address")
+    @MapsId("neighbor_ipaddress")
+    @JoinColumn(name = "neighbor_ipaddress")
     private Neighbor neighbor;
 
     @Column(name = "cost")
