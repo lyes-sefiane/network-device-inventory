@@ -1,7 +1,9 @@
-package com.lyess.network_device_inventory.dto;
+package com.lyess.network_device_inventory.dto.entities;
 
+import com.lyess.network_device_inventory.utils.Defines;
 import lombok.Builder;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Objects;
@@ -14,8 +16,11 @@ import java.util.Objects;
 @Builder
 public class NeighborDto {
 
+    @Pattern(regexp = Defines.IP_REGEX, message = "Invalid Format")
     private String address;
 
+    @NotBlank(message="Cost should not be blank !")
+    @Digits(integer=10, fraction=0, message = "Cost value constraints : integer=10, fraction=0")
     private int cost;
 
     public NeighborDto() {

@@ -1,7 +1,10 @@
-package com.lyess.network_device_inventory.dto;
+package com.lyess.network_device_inventory.dto.entities;
 
+import com.lyess.network_device_inventory.domain.enums.validator.ElementTypeValidator;
+import com.lyess.network_device_inventory.utils.Defines;
 import lombok.Builder;
 
+import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -14,8 +17,10 @@ import java.util.Set;
 @Builder
 public class NetworkDeviceDto {
 
+    @Pattern(regexp = Defines.IP_REGEX, message = "Invalid Format")
     private String address;
 
+    @ElementTypeValidator
     private String elementType;
 
     private Set<NeighborDto> neighbors = new HashSet<>();

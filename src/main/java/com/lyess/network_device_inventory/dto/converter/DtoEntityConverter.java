@@ -4,8 +4,8 @@ import com.lyess.network_device_inventory.domain.entites.Connection;
 import com.lyess.network_device_inventory.domain.entites.Neighbor;
 import com.lyess.network_device_inventory.domain.entites.NetworkDevice;
 import com.lyess.network_device_inventory.domain.enums.ElementType;
-import com.lyess.network_device_inventory.dto.NeighborDto;
-import com.lyess.network_device_inventory.dto.NetworkDeviceDto;
+import com.lyess.network_device_inventory.dto.entities.NeighborDto;
+import com.lyess.network_device_inventory.dto.entities.NetworkDeviceDto;
 
 import java.util.Set;
 import java.util.stream.Collectors;
