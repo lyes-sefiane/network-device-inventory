@@ -1,9 +1,11 @@
 package com.lyess.network_device_inventory.domain.entites;
 
-import lombok.Builder;
+import lombok.*;
 
-import javax.persistence.*;
-import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author : Lyes Sefiane
@@ -13,44 +15,16 @@ import java.util.Objects;
 @Entity
 @Table(name = "neighbor")
 @Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Neighbor {
 
     @Id
     @Column(name = "ipaddress")
     private String ipAddress;
 
-    public Neighbor(){
-        //
-    }
-    public Neighbor(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
-
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Neighbor neighbor = (Neighbor) o;
-        return ipAddress.equals(neighbor.ipAddress);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(ipAddress);
-    }
-
-    @Override
-    public String toString() {
-        return "Neighbor{" +
-                "ipAddress='" + ipAddress + '\'' +
-                '}';
-    }
 }

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * @created : 2021-12-25 12:17 p.m.
  */
 @Component
-public class Converter implements IConverter<NetworkDeviceDto, NetworkDevice> {
+public class ModelMapper implements IModelMapper<NetworkDeviceDto, NetworkDevice> {
 
     /**
      * Convert DTO to Entity

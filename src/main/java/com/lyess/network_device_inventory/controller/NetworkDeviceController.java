@@ -1,5 +1,6 @@
 package com.lyess.network_device_inventory.controller;
 
+import com.lyess.network_device_inventory.domain.entites.NetworkDevice;
 import com.lyess.network_device_inventory.dto.entities.NetworkDeviceDto;
 import com.lyess.network_device_inventory.service.IService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,10 @@ import java.util.List;
 @RequestMapping(value = "/v1/network-devices", consumes= MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class NetworkDeviceController {
 
-    private final IService networkDeviceService;
+    private final IService<NetworkDevice, NetworkDeviceDto> networkDeviceService;
 
     @Autowired
-    public NetworkDeviceController(IService networkDeviceService) {
+    public NetworkDeviceController(IService<NetworkDevice, NetworkDeviceDto> networkDeviceService) {
         this.networkDeviceService = networkDeviceService;
     }
 
