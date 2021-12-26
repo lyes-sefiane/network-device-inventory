@@ -7,8 +7,11 @@ import java.util.List;
  * @mailto : lyes.sefiane@gmail.com
  * @created : 2021-12-25 3:59 p.m.
  */
-public interface IService<T, R> {
+public interface IService<T> {
 
-    List<R> findAll();
+    List<T> findAll();
 
+    T findById(String id);
+
+    T save(T networkDeviceDto);
 }

@@ -3,6 +3,7 @@ package com.lyess.network_device_inventory.service;
 import com.lyess.network_device_inventory.converter.IModelMapper;
 import com.lyess.network_device_inventory.domain.entites.NetworkDevice;
 import com.lyess.network_device_inventory.dto.entities.NetworkDeviceDto;
+import com.lyess.network_device_inventory.exception.NetworkDeviceNotFoundException;
 import com.lyess.network_device_inventory.repository.INetworkDeviceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,26 +19,38 @@ import java.util.stream.Collectors;
  * @created : 2021-12-25 2:31 p.m.
  */
 @Service
-public class NetworkDeviceService implements IService<NetworkDevice, NetworkDeviceDto> {
+public class NetworkDeviceService implements IService<NetworkDeviceDto> {
 
     private static final Logger logger = LoggerFactory.getLogger(NetworkDeviceService.class);
 
     private final INetworkDeviceRepository networkDeviceRepository;
 
-    private final IModelMapper<NetworkDeviceDto, NetworkDevice> converter;
+    private final IModelMapper<NetworkDeviceDto, NetworkDevice> modelMapper;
 
     @Autowired
-    public NetworkDeviceService(INetworkDeviceRepository networkDeviceRepository, IModelMapper<NetworkDeviceDto, NetworkDevice> converter) {
+    public NetworkDeviceService(INetworkDeviceRepository networkDeviceRepository, IModelMapper<NetworkDeviceDto, NetworkDevice> modelMapper) {
         this.networkDeviceRepository = networkDeviceRepository;
-        this.converter = converter;
+        this.modelMapper = modelMapper;
     }
 
     @Override
     public List<NetworkDeviceDto> findAll() {
         return networkDeviceRepository.findAll()
                 .stream()
-                .map(converter::toDto)
+                .map(modelMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public NetworkDeviceDto findById(String id) {
+        return networkDeviceRepository.findById(id)
+                .map(modelMapper::toDto)
+                .orElseThrow(NetworkDeviceNotFoundException::new);
+    }
+
+    @Override
+    public NetworkDeviceDto save(NetworkDeviceDto networkDeviceDto) {
+        return modelMapper.toDto(networkDeviceRepository.save(modelMapper.toEntity(networkDeviceDto)));
     }
 
 }

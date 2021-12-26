@@ -8,7 +8,5 @@ package com.lyess.network_device_inventory.converter;
 public interface IModelMapper<S,T> {
 
      T toEntity(S s);
-
      S toDto(T t);
-
 }

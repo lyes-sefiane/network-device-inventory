@@ -38,6 +38,8 @@ public class ModelMapper implements IModelMapper<NetworkDeviceDto, NetworkDevice
                 .map(neighborDto -> new Connection(networkDevice, new Neighbor(neighborDto.getAddress()), neighborDto.getCost()))//
                 .collect(Collectors.toSet());
 
+        networkDevice.setConnections(connections);
+
         return networkDevice;
     }
 
