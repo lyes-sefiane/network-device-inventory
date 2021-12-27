@@ -50,4 +50,9 @@ public class NetworkDeviceController {
                                    @PathVariable @Pattern(regexp = Defines.IP_REGEX, message = "Invalid Format") String id) {
         return networkDeviceService.update(networkDeviceDto, id);
     }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable @Pattern(regexp = Defines.IP_REGEX, message = "Invalid Format") String id) {
+        networkDeviceService.delete(id);
+    }
 }

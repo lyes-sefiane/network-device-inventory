@@ -16,4 +16,6 @@ public interface IService<T> {
     T save(T networkDeviceDto);
 
     T update(T networkDeviceDto, String id);
+
+    void delete(String id);
 }

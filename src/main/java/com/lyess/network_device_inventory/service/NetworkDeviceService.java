@@ -44,9 +44,7 @@ public class NetworkDeviceService implements IService<NetworkDeviceDto> {
 
     @Override
     public NetworkDeviceDto findById(String id) {
-        return networkDeviceRepository.findById(id)
-                .map(modelMapper::toDto)
-                .orElseThrow(NetworkDeviceNotFoundException::new);
+        return modelMapper.toDto(findOrElseThrow(id));
     }
 
     @Override
@@ -56,15 +54,19 @@ public class NetworkDeviceService implements IService<NetworkDeviceDto> {
 
     @Override
     public NetworkDeviceDto update(NetworkDeviceDto networkDeviceDto, String id) {
-
-        NetworkDevice existingNetworkDevice = networkDeviceRepository.findById(id)
-                .orElseThrow(NetworkDeviceNotFoundException::new);
-
+        NetworkDevice existingNetworkDevice = findOrElseThrow(id);
         NetworkDevice receivedNetworkDevice = modelMapper.toEntity(networkDeviceDto);
-
         BeanUtils.copyProperties(receivedNetworkDevice, existingNetworkDevice);
-
         return modelMapper.toDto(networkDeviceRepository.save(existingNetworkDevice));
+    }
+
+    @Override
+    public void delete(String id) {
+        networkDeviceRepository.delete(findOrElseThrow(id));
+    }
+
+    private NetworkDevice findOrElseThrow(String id) {
+        return networkDeviceRepository.findById(id).orElseThrow(NetworkDeviceNotFoundException::new);
     }
 
 }
