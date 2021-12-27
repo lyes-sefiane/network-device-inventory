@@ -137,10 +137,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 
         StringBuilder message = new StringBuilder();
         message.append(ex.getContentType())//
-                .append(" ")
-                .append("mediaType is not supported")//
-                .append(". ")
-                .append("supported media types are : ")//
+                .append(" mediaType is not supported. supported media types are : ")//
                 .append(ex.getSupportedMediaTypes());
 
         return buildResponseEntity(new ExceptionResponse(message.toString(), //
