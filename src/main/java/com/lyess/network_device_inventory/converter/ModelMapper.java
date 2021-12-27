@@ -1,15 +1,20 @@
 package com.lyess.network_device_inventory.converter;
 
+import com.lyess.network_device_inventory.controller.NetworkDeviceController;
 import com.lyess.network_device_inventory.domain.entites.Connection;
 import com.lyess.network_device_inventory.domain.entites.Neighbor;
 import com.lyess.network_device_inventory.domain.entites.NetworkDevice;
 import com.lyess.network_device_inventory.domain.enums.ElementType;
 import com.lyess.network_device_inventory.dto.entities.NeighborDto;
 import com.lyess.network_device_inventory.dto.entities.NetworkDeviceDto;
+import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * @author : Lyes Sefiane
@@ -63,6 +68,10 @@ public class ModelMapper implements IModelMapper<NetworkDeviceDto, NetworkDevice
                 .collect(Collectors.toSet());
 
         networkDeviceDto.setNeighbors(neighbors);
+
+        Link link = linkTo(methodOn(NetworkDeviceController.class).findById(networkDeviceDto.getAddress())).withSelfRel();
+
+        networkDeviceDto.add(link);
 
         return networkDeviceDto;
     }

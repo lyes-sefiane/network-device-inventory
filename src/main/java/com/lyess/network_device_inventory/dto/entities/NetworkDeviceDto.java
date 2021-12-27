@@ -3,6 +3,7 @@ package com.lyess.network_device_inventory.dto.entities;
 import com.lyess.network_device_inventory.domain.enums.validator.ElementTypeValidator;
 import com.lyess.network_device_inventory.utils.Defines;
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.Pattern;
 import java.util.HashSet;
@@ -16,11 +17,11 @@ import java.util.Set;
 @Builder
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class NetworkDeviceDto {
+public class NetworkDeviceDto extends RepresentationModel<NetworkDeviceDto> {
 
     @Pattern(regexp = Defines.IP_REGEX, message = "Invalid Format")
     @EqualsAndHashCode.Include
@@ -30,5 +31,4 @@ public class NetworkDeviceDto {
     private String elementType;
 
     private Set<NeighborDto> neighbors = new HashSet<>();
-
 }
