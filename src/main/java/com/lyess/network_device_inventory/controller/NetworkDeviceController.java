@@ -41,7 +41,13 @@ public class NetworkDeviceController {
     }
 
     @PostMapping("/")
-    public NetworkDeviceDto save (@RequestBody @Valid NetworkDeviceDto networkDeviceDto) {
+    public NetworkDeviceDto save(@RequestBody @Valid NetworkDeviceDto networkDeviceDto) {
         return networkDeviceService.save(networkDeviceDto);
+    }
+
+    @PutMapping("/{id}")
+    public NetworkDeviceDto update(@RequestBody @Valid NetworkDeviceDto networkDeviceDto,
+                                   @PathVariable @Pattern(regexp = Defines.IP_REGEX, message = "Invalid Format") String id) {
+        return networkDeviceService.update(networkDeviceDto, id);
     }
 }

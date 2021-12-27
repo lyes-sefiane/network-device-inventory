@@ -14,4 +14,6 @@ public interface IService<T> {
     T findById(String id);
 
     T save(T networkDeviceDto);
+
+    T update(T networkDeviceDto, String id);
 }

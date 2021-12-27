@@ -7,6 +7,7 @@ import com.lyess.network_device_inventory.exception.NetworkDeviceNotFoundExcepti
 import com.lyess.network_device_inventory.repository.INetworkDeviceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +52,19 @@ public class NetworkDeviceService implements IService<NetworkDeviceDto> {
     @Override
     public NetworkDeviceDto save(NetworkDeviceDto networkDeviceDto) {
         return modelMapper.toDto(networkDeviceRepository.save(modelMapper.toEntity(networkDeviceDto)));
+    }
+
+    @Override
+    public NetworkDeviceDto update(NetworkDeviceDto networkDeviceDto, String id) {
+
+        NetworkDevice existingNetworkDevice = networkDeviceRepository.findById(id)
+                .orElseThrow(NetworkDeviceNotFoundException::new);
+
+        NetworkDevice receivedNetworkDevice = modelMapper.toEntity(networkDeviceDto);
+
+        BeanUtils.copyProperties(receivedNetworkDevice, existingNetworkDevice);
+
+        return modelMapper.toDto(networkDeviceRepository.save(existingNetworkDevice));
     }
 
 }

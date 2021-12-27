@@ -35,5 +35,24 @@ public class NetworkDevice implements Serializable {
     private ElementType elementType;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "networkDevice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<Connection> connections = new HashSet<>();
+
+    /**
+     * Override set Connection method
+     *
+     * Instead, to : this.connections = connections
+     *
+     * This will override the set that Hibernate is tracking & will throw an exception.
+     *
+     * org.hibernate.HibernateException: A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance
+     *
+     * @param connections
+     */
+    public void setConnections(Set<Connection> connections) {
+        this.getConnections().clear();
+        if(connections != null) {
+            this.getConnections().addAll(connections);
+        }
+    }
 }
