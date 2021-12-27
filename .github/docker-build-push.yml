@@ -1,8 +1,5 @@
-- name: Docker Build & Push Action
-  uses: mr-smithers-excellent/docker-build-push@v5.6
-
-
-name: ci
+name: Docker Build & Push Action
+uses: mr-smithers-excellent/docker-build-push@v5.6
 
 on:
   push:
