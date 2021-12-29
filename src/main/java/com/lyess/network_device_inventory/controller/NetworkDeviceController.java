@@ -30,7 +30,7 @@ public class NetworkDeviceController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping
     public List<NetworkDeviceDto> findAllNetworkDevice() {
         return networkDeviceService.findAll();
     }
@@ -40,7 +40,7 @@ public class NetworkDeviceController {
         return networkDeviceService.findById(id);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public NetworkDeviceDto save(@RequestBody @Valid NetworkDeviceDto networkDeviceDto) {
         return networkDeviceService.save(networkDeviceDto);
     }
