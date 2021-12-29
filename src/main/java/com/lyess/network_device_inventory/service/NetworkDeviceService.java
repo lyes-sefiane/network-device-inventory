@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
  * @created : 2021-12-25 2:31 p.m.
  */
 @Service
+@Transactional
 public class NetworkDeviceService implements IService<NetworkDeviceDto> {
 
     private static final Logger logger = LoggerFactory.getLogger(NetworkDeviceService.class);
