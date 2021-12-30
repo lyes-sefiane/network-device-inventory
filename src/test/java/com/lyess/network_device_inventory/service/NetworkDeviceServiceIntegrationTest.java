@@ -46,7 +46,7 @@ public class NetworkDeviceServiceIntegrationTest {
 
     @Test
     @Order(1)
-    @DisplayName("Save Network Device")
+    @DisplayName("CREATE Network Device")
     public void testSave() {
         // given networkDeviceDto
         // when
@@ -58,7 +58,7 @@ public class NetworkDeviceServiceIntegrationTest {
 
     @Test
     @Order(2)
-    @DisplayName("Find Network Device By Id")
+    @DisplayName("READ Network Device")
     public void testFindById() {
         // given
         String id = "10.133.10.20";
@@ -71,7 +71,7 @@ public class NetworkDeviceServiceIntegrationTest {
 
     @Test
     @Order(3)
-    @DisplayName("Update Network Device")
+    @DisplayName("UPDATE Network Device")
     public void testUpdate() {
         // given
         networkDeviceDto.setElementType(ElementType.SWITCH.getValue());
@@ -85,7 +85,7 @@ public class NetworkDeviceServiceIntegrationTest {
 
     @Test
     @Order(4)
-    @DisplayName("Delete Network Device")
+    @DisplayName("DELETE Network Device")
     public void testDelete() {
         // given networkDeviceDto
         // when

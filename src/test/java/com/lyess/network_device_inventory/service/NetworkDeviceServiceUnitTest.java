@@ -51,7 +51,7 @@ public class NetworkDeviceServiceUnitTest {
 
     @Test
     @Order(1)
-    @DisplayName("Save Network Device")
+    @DisplayName("CREATE Network Device")
     public void testSave() {
         // Given networkDevice
 
@@ -70,7 +70,7 @@ public class NetworkDeviceServiceUnitTest {
 
     @Test
     @Order(2)
-    @DisplayName("Find Network Device By Id")
+    @DisplayName("READ Network Device")
     public void testFindById() {
         // Given networkDevice
 
@@ -87,22 +87,10 @@ public class NetworkDeviceServiceUnitTest {
         assertEquals(0, networkDeviceDto.getNeighbors().size());
     }
 
+
     @Test
     @Order(3)
-    @DisplayName("Throw Network Device Not Found Exception")
-    public void testThrowExceptionFindById() {
-        // Given networkDevice
-
-        // When
-        when(networkDeviceRepository.findById(networkDevice.getIpAddress())).thenReturn(Optional.ofNullable(null));
-
-        // Then
-        assertThrows(NetworkDeviceNotFoundException.class, () -> networkDeviceService.findById(networkDevice.getIpAddress()));
-    }
-
-    @Test
-    @Order(4)
-    @DisplayName("Update Network Device")
+    @DisplayName("UPDATE Network Device")
     public void testUpdate() {
         // Given networkDevice
         networkDevice.setElementType(ElementType.SWITCH);
@@ -120,8 +108,8 @@ public class NetworkDeviceServiceUnitTest {
     }
 
     @Test
-    @Order(5)
-    @DisplayName("Delete Network Device")
+    @Order(4)
+    @DisplayName("DELETE Network Device")
     public void testDelete() {
         // Given networkDevice
 
@@ -134,5 +122,18 @@ public class NetworkDeviceServiceUnitTest {
 
         // Then
         verify(networkDeviceRepository, times(1)).delete(networkDevice);
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("EXCEPTION NetworkDeviceNotFoundException")
+    public void testThrowExceptionFindById() {
+        // Given networkDevice
+
+        // When
+        when(networkDeviceRepository.findById(networkDevice.getIpAddress())).thenReturn(Optional.ofNullable(null));
+
+        // Then
+        assertThrows(NetworkDeviceNotFoundException.class, () -> networkDeviceService.findById(networkDevice.getIpAddress()));
     }
 }
