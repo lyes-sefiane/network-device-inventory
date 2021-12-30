@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
-import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Transactional
 public class NetworkDeviceRepositoryIntegrationTest {
 
     @Autowired
