@@ -56,7 +56,7 @@ class NetworkDeviceControllerUnitTest {
 
     @Test
     @Order(1)
-    @DisplayName("POST Network Device")
+    @DisplayName("CREATE Network Device")
     public void testSave() throws Exception {
         // given networkDeviceDto
 
@@ -78,7 +78,7 @@ class NetworkDeviceControllerUnitTest {
 
     @Test
     @Order(2)
-    @DisplayName("GET All Network Device")
+    @DisplayName("READ Network Devices")
     public void testGetAll() throws Exception {
         // given existing sql data + previous POST ~ 9 networkDeviceDto
 
@@ -96,7 +96,7 @@ class NetworkDeviceControllerUnitTest {
 
     @Test
     @Order(3)
-    @DisplayName("GET Network Device")
+    @DisplayName("READ Network Device")
     public void testGet() throws Exception {
         // given networkDeviceDto
 
@@ -116,7 +116,7 @@ class NetworkDeviceControllerUnitTest {
 
     @Test
     @Order(4)
-    @DisplayName("PUT Network Device")
+    @DisplayName("UPDATE Network Device")
     public void testPut() throws Exception {
         // given networkDeviceDto
         networkDeviceDto.setElementType(ElementType.DESKTOP_COMPUTER.getValue());
