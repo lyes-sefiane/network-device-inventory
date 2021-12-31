@@ -3,6 +3,7 @@ package com.lyess.network_device_inventory.exception.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 public class ExceptionResponse {
 
     @JsonIgnore
@@ -44,6 +46,7 @@ public class ExceptionResponse {
 
     private String path;
 
+    @Schema(allOf = {ValidationError.class}, implementation = ErrorResponse.class)
     private List<ErrorResponse> details;
 
 
