@@ -15,6 +15,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 
 /**
@@ -40,6 +41,47 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
                         ex.getMessage(), //
                         HttpStatus.NOT_FOUND, //
                         ((ServletWebRequest) request).getRequest().getRequestURI()));
+    }
+
+
+    /**
+     * Handle Entity Not Found Exception
+     *
+     * Thrown when required entities in relationship are not found (at least one) vin db.
+     *
+     * @param ex
+     * @param request
+     * @return responseEntity : ResponseEntity<Object>
+     */
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(//
+                ex.getMessage(), //
+                HttpStatus.NOT_FOUND, //
+                ((ServletWebRequest) request).getRequest().getRequestURI());
+
+        return buildResponseEntity(exceptionResponse);
+    }
+
+    /**
+     * Handle Entity Already Exception
+     *
+     * Thrown when an entity already exists in db.
+     *
+     * @param ex
+     * @param request
+     * @return responseEntity : ResponseEntity<Object>
+     */
+    @ExceptionHandler(NetworkDeviceAlreadyExistsException.class)
+    public ResponseEntity<Object> handleEntityNotFoundException(NetworkDeviceAlreadyExistsException ex, WebRequest request) {
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(//
+                ex.getMessage(), //
+                HttpStatus.UNPROCESSABLE_ENTITY, //
+                ((ServletWebRequest) request).getRequest().getRequestURI());
+
+        return buildResponseEntity(exceptionResponse);
     }
 
     /**

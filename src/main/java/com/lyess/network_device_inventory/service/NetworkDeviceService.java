@@ -3,6 +3,7 @@ package com.lyess.network_device_inventory.service;
 import com.lyess.network_device_inventory.converter.IModelMapper;
 import com.lyess.network_device_inventory.domain.entites.NetworkDevice;
 import com.lyess.network_device_inventory.dto.entities.NetworkDeviceDto;
+import com.lyess.network_device_inventory.exception.NetworkDeviceAlreadyExistsException;
 import com.lyess.network_device_inventory.exception.NetworkDeviceNotFoundException;
 import com.lyess.network_device_inventory.repository.INetworkDeviceRepository;
 import org.slf4j.Logger;
@@ -46,17 +47,20 @@ public class NetworkDeviceService implements IService<NetworkDeviceDto> {
 
     @Override
     public NetworkDeviceDto findById(String id) {
-        return modelMapper.toDto(findOrElseThrow(id));
+        return modelMapper.toDto(networkDeviceRepository.findById(id).orElseThrow(NetworkDeviceNotFoundException::new));
     }
 
     @Override
     public NetworkDeviceDto save(NetworkDeviceDto networkDeviceDto) {
+        networkDeviceRepository.findById(networkDeviceDto.getAddress()).ifPresent(networkDevice -> {
+            throw new NetworkDeviceAlreadyExistsException(networkDevice);
+        });
         return modelMapper.toDto(networkDeviceRepository.save(modelMapper.toEntity(networkDeviceDto)));
     }
 
     @Override
     public NetworkDeviceDto update(NetworkDeviceDto networkDeviceDto, String id) {
-        NetworkDevice existingNetworkDevice = findOrElseThrow(id);
+        NetworkDevice existingNetworkDevice = networkDeviceRepository.findById(id).orElseThrow(NetworkDeviceNotFoundException::new);
         NetworkDevice receivedNetworkDevice = modelMapper.toEntity(networkDeviceDto);
         BeanUtils.copyProperties(receivedNetworkDevice, existingNetworkDevice);
         return modelMapper.toDto(networkDeviceRepository.save(existingNetworkDevice));
@@ -64,11 +68,7 @@ public class NetworkDeviceService implements IService<NetworkDeviceDto> {
 
     @Override
     public void delete(String id) {
-        networkDeviceRepository.delete(findOrElseThrow(id));
-    }
-
-    private NetworkDevice findOrElseThrow(String id) {
-        return networkDeviceRepository.findById(id).orElseThrow(NetworkDeviceNotFoundException::new);
+        networkDeviceRepository.delete(networkDeviceRepository.findById(id).orElseThrow(NetworkDeviceNotFoundException::new));
     }
 
 }
