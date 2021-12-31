@@ -1,6 +1,7 @@
 FROM maven:3-amazoncorretto-11 as builder
 WORKDIR /network-device-inventory
-COPY . /network-device-inventory
+COPY pom.xml /network-device-inventory
+COPY src /network-device-inventory
 RUN mvn clean install
 
 FROM amazoncorretto:11-alpine
