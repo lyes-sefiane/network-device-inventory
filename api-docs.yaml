@@ -1,0 +1,273 @@
+openapi: 3.0.1
+info:
+  title: Network Device Inventory
+  description: Ability to manage network devices based on CRUD operations.
+  contact:
+    name: Lyes S.
+    url: https://github.com/lyes-s
+    email: lyes-s@gmail.com
+  license:
+    name: MIT
+    url: https://github.com/lyes-s/network-device-inventory/blob/master/LICENSE.md
+  version: "1.0"
+externalDocs:
+  description: GitHub Wiki
+  url: https://github.com/lyes-s/network-device-inventory/wiki
+servers:
+- url: http://localhost:8080/inventory/api
+  description: Generated server url
+paths:
+  /v1/network-devices/{id}:
+    get:
+      tags:
+      - Network Device Controller
+      summary: Get Network Device By Id
+      operationId: findById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          pattern: "\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\\.|$)){4}\\b"
+          type: string
+      responses:
+        "400":
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "404":
+          description: NOT_FOUND
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "415":
+          description: UNSUPPORTED_MEDIA_TYPE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetworkDeviceDto'
+    put:
+      tags:
+      - Network Device Controller
+      summary: Update Network Device
+      operationId: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          pattern: "\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\\.|$)){4}\\b"
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NetworkDeviceDto'
+        required: true
+      responses:
+        "400":
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "404":
+          description: NOT_FOUND
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "415":
+          description: UNSUPPORTED_MEDIA_TYPE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetworkDeviceDto'
+        "422":
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+    delete:
+      tags:
+      - Network Device Controller
+      summary: Delete Network Device
+      operationId: delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          pattern: "\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\\.|$)){4}\\b"
+          type: string
+      responses:
+        "400":
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "404":
+          description: NOT_FOUND
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "415":
+          description: UNSUPPORTED_MEDIA_TYPE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+  /v1/network-devices:
+    get:
+      tags:
+      - Network Device Controller
+      summary: Get Network Devices
+      operationId: findAllNetworkDevice
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetworkDeviceDto'
+    post:
+      tags:
+      - Network Device Controller
+      summary: Create Network Device
+      operationId: save
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NetworkDeviceDto'
+        required: true
+      responses:
+        "400":
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "404":
+          description: NOT_FOUND
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "415":
+          description: UNSUPPORTED_MEDIA_TYPE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetworkDeviceDto'
+        "422":
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+components:
+  schemas:
+    Link:
+      type: object
+      properties:
+        rel:
+          type: string
+        href:
+          type: string
+        hreflang:
+          type: string
+        media:
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+        deprecation:
+          type: string
+        profile:
+          type: string
+        name:
+          type: string
+    NeighborDto:
+      required:
+      - cost
+      type: object
+      properties:
+        address:
+          pattern: "\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\\.|$)){4}\\b"
+          type: string
+        cost:
+          type: integer
+          format: int32
+    NetworkDeviceDto:
+      type: object
+      properties:
+        address:
+          pattern: "\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\\.|$)){4}\\b"
+          type: string
+        elementType:
+          type: string
+        neighbors:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/NeighborDto'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+    ExceptionResponse:
+      type: object
+      properties:
+        timeStamp:
+          type: string
+          format: date-time
+        status:
+          type: string
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        details:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ValidationError'
+      readOnly: true
+    ValidationError:
+      type: object
+      properties:
+        object:
+          type: string
+        field:
+          type: string
+        rejectedValue:
+          type: object
+        message:
+          type: string
