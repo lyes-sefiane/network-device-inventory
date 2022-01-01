@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+
+# =================================
+# /!\  Menu Selection Sample   /!\
+# =================================
+
+
+echo "
+███╗   ██╗███████╗████████╗██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗    ██████╗ ███████╗██╗   ██╗██╗ ██████╗███████╗
+████╗  ██║██╔════╝╚══██╔══╝██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝    ██╔══██╗██╔════╝██║   ██║██║██╔════╝██╔════╝
+██╔██╗ ██║█████╗     ██║   ██║ █╗ ██║██║   ██║██████╔╝█████╔╝     ██║  ██║█████╗  ██║   ██║██║██║     █████╗
+██║╚██╗██║██╔══╝     ██║   ██║███╗██║██║   ██║██╔══██╗██╔═██╗     ██║  ██║██╔══╝  ╚██╗ ██╔╝██║██║     ██╔══╝
+██║ ╚████║███████╗   ██║   ╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗    ██████╔╝███████╗ ╚████╔╝ ██║╚██████╗███████╗
+╚═╝  ╚═══╝╚══════╝   ╚═╝    ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝    ╚═════╝ ╚══════╝  ╚═══╝  ╚═╝ ╚═════╝╚══════╝
+
+██╗███╗   ██╗██╗   ██╗███████╗███╗   ██╗████████╗ ██████╗ ██████╗ ██╗   ██╗
+██║████╗  ██║██║   ██║██╔════╝████╗  ██║╚══██╔══╝██╔═══██╗██╔══██╗╚██╗ ██╔╝
+██║██╔██╗ ██║██║   ██║█████╗  ██╔██╗ ██║   ██║   ██║   ██║██████╔╝ ╚████╔╝
+██║██║╚██╗██║╚██╗ ██╔╝██╔══╝  ██║╚██╗██║   ██║   ██║   ██║██╔══██╗  ╚██╔╝
+██║██║ ╚████║ ╚████╔╝ ███████╗██║ ╚████║   ██║   ╚██████╔╝██║  ██║   ██║
+╚═╝╚═╝  ╚═══╝  ╚═══╝  ╚══════╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝   ╚═╝"
+
+
+
+declare -a options=(
+	"Compose Up"
+	"Flyway DB Schema Migration"
+	"Compose Down"
+	"quit"
+)
+
+echo
+
+echo Hi $(uname) "😊 please make a selection."
+
+echo
+
+select option in "${options[@]}"
+
+do
+
+  case ${option} in
+
+    # Choice : 1
+    "Compose Up")
+          echo "Docker Compose Up ...";
+          docker-compose pull network-device-inventory && docker-compose --env-file .env up -d;
+          break;;
+
+    # Choice : 2
+    "Flyway DB Migration")
+          echo "Flyway DB Schema Migration...";
+          docker-compose --env-file .env up -d flyway;
+          break;;
+
+    # Choice : 3
+    "Compose Down")
+          echo "Docker Compose Down ...";
+          docker-compose down;
+          break;;
+
+    # Choice : 4
+    quit)
+          echo Bye $(uname) ! ;
+          break;;
+
+    # Choice : Default
+    *)
+          echo $(uname) "I'm not sure what that is O.Ô !"
+  esac
+
+done
