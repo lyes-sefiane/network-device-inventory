@@ -49,7 +49,7 @@ do
           break;;
 
     # Choice : 2
-    "Flyway DB Migration")
+    "Flyway DB Schema Migration")
           echo "Flyway DB Schema Migration...";
           docker-compose --env-file .env up -d flyway;
           break;;
