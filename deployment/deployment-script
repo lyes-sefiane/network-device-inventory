@@ -32,7 +32,7 @@ declare -a options=(
 
 echo
 
-echo Hi $(uname) "😊 please make a selection."
+echo $(uname) ": Hi 😊 ! please make a selection."
 
 echo
 
@@ -62,12 +62,12 @@ do
 
     # Choice : 4
     quit)
-          echo Bye $(uname) ! ;
+          echo $(uname) ": Bye !" ;
           break;;
 
     # Choice : Default
     *)
-          echo $(uname) "I'm not sure what that is O.Ô !"
+          echo $(uname) ": I'm not sure what that is O.Ô !"
   esac
 
 done
