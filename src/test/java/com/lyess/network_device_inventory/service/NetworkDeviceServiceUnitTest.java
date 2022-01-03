@@ -5,6 +5,7 @@ import com.lyess.network_device_inventory.domain.entites.NetworkDevice;
 import com.lyess.network_device_inventory.domain.enums.ElementType;
 import com.lyess.network_device_inventory.dto.entities.NetworkDeviceDto;
 import com.lyess.network_device_inventory.exception.NetworkDeviceNotFoundException;
+import com.lyess.network_device_inventory.repository.INeighborRepository;
 import com.lyess.network_device_inventory.repository.INetworkDeviceRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +32,9 @@ public class NetworkDeviceServiceUnitTest {
 
     @Mock
     private INetworkDeviceRepository networkDeviceRepository;
+
+    @Mock
+    private INeighborRepository neighborRepository;
 
     @Spy
     private ModelMapper modelMapper;

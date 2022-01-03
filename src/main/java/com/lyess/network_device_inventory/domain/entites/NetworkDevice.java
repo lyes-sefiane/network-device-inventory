@@ -55,4 +55,13 @@ public class NetworkDevice implements Serializable {
             this.getConnections().addAll(connections);
         }
     }
+
+    @Override
+    public String toString() {
+        return "NetworkDevice{" +
+                "ipAddress='" + ipAddress + '\'' +
+                ", elementType=" + elementType +
+                ", connections=" + connections +
+                '}';
+    }
 }

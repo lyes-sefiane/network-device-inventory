@@ -43,4 +43,12 @@ public class Connection implements Serializable {
         this.neighbor = neighbor;
         this.cost = cost;
     }
+
+    @Override
+    public String toString() {
+        return "Connection{" +
+                "connectionId=" + connectionId +
+                ", cost=" + cost +
+                '}';
+    }
 }
