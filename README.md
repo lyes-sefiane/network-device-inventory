@@ -1,12 +1,4 @@
-<H1 align="center"> Network Device Inventory </H1>
-
-<p align="center">
-<img src="https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/restful-api.png" width="35%">
-</p>
-
-<p align="center">
-<img src="https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/Architecture.PNG" width="100%">
-</p>
+<H1 align="center"> Network Device Inventory Restful Web Service</H1>
 
 # OpenAPI/Swagger Documentation
 
