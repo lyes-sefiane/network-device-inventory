@@ -9,10 +9,12 @@ import com.lyess.network_device_inventory.exception.NetworkDeviceAlreadyExistsEx
 import com.lyess.network_device_inventory.exception.NetworkDeviceNotFoundException;
 import com.lyess.network_device_inventory.repository.INeighborRepository;
 import com.lyess.network_device_inventory.repository.INetworkDeviceRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,8 +31,6 @@ import java.util.stream.Collectors;
 @Transactional
 public class NetworkDeviceService implements IService<NetworkDeviceDto> {
 
-    private static final Logger logger = LoggerFactory.getLogger(NetworkDeviceService.class);
-
     private final INetworkDeviceRepository networkDeviceRepository;
 
     private final INeighborRepository neighborRepository;
@@ -44,6 +44,12 @@ public class NetworkDeviceService implements IService<NetworkDeviceDto> {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * Find Network Devices
+     *
+     * @return networkDevicesDto
+     */
+    @Cacheable(cacheNames = "networkDevices")
     @Override
     public List<NetworkDeviceDto> findAll() {
         return networkDeviceRepository.findAll()
@@ -52,30 +58,48 @@ public class NetworkDeviceService implements IService<NetworkDeviceDto> {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Find Network Device
+     *
+     * @param id
+     * @return networkDeviceDto
+     */
+    @Cacheable(cacheNames = "networkDevice", key ="#id")
     @Override
     public NetworkDeviceDto findById(String id) {
         return modelMapper.toDto(networkDeviceRepository.findById(id).orElseThrow(NetworkDeviceNotFoundException::new));
     }
 
+    /**
+     * Create Network Device
+     *
+     * @param networkDeviceDto
+     * @return networkDeviceDto
+     */
+    @Caching(put = @CachePut(cacheNames = "networkDevice", key = "#networkDeviceDto.address"),
+            evict = @CacheEvict(cacheNames = "networkDevices", allEntries = true))
     @Override
     public NetworkDeviceDto save(NetworkDeviceDto networkDeviceDto) {
         networkDeviceRepository.findById(networkDeviceDto.getAddress()).ifPresent(networkDevice -> {
             throw new NetworkDeviceAlreadyExistsException(networkDevice);
         });
-
         NetworkDevice networkDevice = modelMapper.toEntity(networkDeviceDto);
-
         Set<Neighbor> neighbors = getNeighbors(networkDevice);
-
         Neighbor neighborFromNetworkDeviceSelf = new Neighbor(networkDevice.getIpAddress());
-
         neighbors.add(neighborFromNetworkDeviceSelf);
-
         neighborRepository.saveAll(neighbors);
-
         return modelMapper.toDto(networkDeviceRepository.save(networkDevice));
     }
 
+    /**
+     * Update Network Device
+     *
+     * @param networkDeviceDto
+     * @param id
+     * @return networkDeviceDto
+     */
+    @Caching(put = @CachePut(cacheNames = "networkDevice", key = "#id"),
+            evict = @CacheEvict(cacheNames = "networkDevices", allEntries = true))
     @Override
     public NetworkDeviceDto update(NetworkDeviceDto networkDeviceDto, String id) {
         NetworkDevice existingNetworkDevice = networkDeviceRepository.findById(id).orElseThrow(NetworkDeviceNotFoundException::new);
@@ -86,11 +110,27 @@ public class NetworkDeviceService implements IService<NetworkDeviceDto> {
         return modelMapper.toDto(networkDeviceRepository.save(existingNetworkDevice));
     }
 
+    /**
+     * Delete Network Device
+     *
+     * @param id
+     */
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "networkDevices", allEntries = true),
+            @CacheEvict(cacheNames = "networkDevice", key = "#id")
+    })
     @Override
     public void delete(String id) {
         networkDeviceRepository.delete(networkDeviceRepository.findById(id).orElseThrow(NetworkDeviceNotFoundException::new));
+        neighborRepository.findById(id).ifPresent(neighborRepository::delete);
     }
 
+    /**
+     * Get Neighbors
+     *
+     * @param networkDevice
+     * @return Neighbors
+     */
     private Set<Neighbor> getNeighbors(NetworkDevice networkDevice) {
         return networkDevice.getConnections()//
                 .stream()//
