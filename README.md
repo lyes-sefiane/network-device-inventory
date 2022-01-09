@@ -10,7 +10,7 @@
 
 ## Enhancements
 
-* Secure Network Device Inventory RESTful API with Keycloak.
+* Secure Network Device Inventory RESTful API with [Keycloak](https://www.keycloak.org/).
 * PostgreSQL Horizontal Scaling ([Options](https://www.highgo.ca/2021/08/09/horizontal-scalability-options-in-postgresql/)).
 * Docker Swarm Stack Deployment ([Example](https://github.com/lyes-s/publisher-subscriber-microservices/wiki/Docker-Swarm)).
 
