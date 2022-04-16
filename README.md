@@ -1,5 +1,14 @@
 # Network Device Inventory Restful Web Service
 
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/lyes-s/network-device-inventory/Java%20CI%20with%20Maven/master)
+[![CodeQL](https://github.com/lyes-s/network-device-inventory/workflows/CodeQL/badge.svg)](https://github.com/lyes-s/network-device-inventory/actions?query=workflow%3ACodeQL)
+![GitHub top language](https://img.shields.io/github/languages/top/lyes-s/network-device-inventory)
+![Docker Pulls](https://img.shields.io/docker/pulls/lsefiane/network-device-inventory)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/lyes-s/network-device-inventory)
+![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/y/lyes-s/network-device-inventory/master)
+![GitHub Repo stars](https://img.shields.io/github/stars/lyes-s/network-device-inventory?style=social)
+[![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/lyes-s/network-device-inventory/blob/master/LICENSE.md)
+
 ## OpenAPI/Swagger Documentation
 
 * [lyes-s.github.io/network-device-inventory/](https://lyes-s.github.io/network-device-inventory/)
