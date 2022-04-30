@@ -1,0 +1,41 @@
+---
+- name: Open SSH
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Generate SSH key in ~/.ssh/
+      openssh_keypair:
+        path: "{{ssh_key_path}}"
+        type: rsa
+        state: present
+        force: no
+      when:
+        - inventory_hostname in groups['localhost']
+
+    - name: Deploy SSH public key
+      authorized_key:
+        user: "{{ lookup('pipe', 'id -un') }}"
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      when:
+        - inventory_hostname in groups['ubuntu']
+
+- name: Docker Deloyment
+  hosts: ubuntu
+  gather_facts: no
+  tasks:
+    - name: Create Deployment Directory in Remote Host
+      file:
+        path: ~/docker-compose/
+        state: directory
+
+    - name: Copy Docker-Compose Files to Remote Host
+      copy:
+        src: ../docker-compose/
+        dest: ~/docker-compose/
+
+    - name: Run Docker Compose Up
+      become: True
+      shell:
+        cmd: "docker-compose pull network-device-inventory && docker-compose --env-file .env up -d"
+        chdir: ~/docker-compose/

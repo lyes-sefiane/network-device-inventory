@@ -59,8 +59,105 @@ services:
     networks:
       - microservice
 
+  consul:
+    image: consul:latest
+    container_name: consul
+    command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
+    restart: always
+    ports:
+      - ${CONSUL_PORT}:${CONSUL_PORT}
+    volumes:
+      - ../consul/config.json:/consul/config/config.json
+    networks:
+      - microservice
+    environment:
+      - CONSUL_BIND_INTERFACE=${CONSUL_BIND_INTERFACE}
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - ${PROMETHEUS_PORT}:${PROMETHEUS_PORT}
+    volumes:
+      - ../prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.enable-lifecycle'
+    depends_on:
+      - cadvisor
+    networks:
+      - microservice
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    restart: unless-stopped
+    ports:
+      - ${ALERT_MANAGER_PORT}:${ALERT_MANAGER_PORT}
+    volumes:
+      - ../alertmanager:/etc/alertmanager
+      - alertmanager-data:/data
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--log.level=debug'
+    networks:
+      - microservice
+
+
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter
+    restart: on-failure
+    ports:
+      - ${NODE_EXPORTER_PORT}:${NODE_EXPORTER_PORT}
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+      - microservice
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    restart: on-failure
+    ports:
+      - ${CADVISOR_HOST_PORT}:${CADVISOR_CONTAINER_PORT}
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - microservice
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    container_name: postgres-exporter
+    restart: on-failure
+    ports:
+      - ${POSTGRES_EXPORTER_PORT}:${POSTGRES_EXPORTER_PORT}
+    depends_on:
+      - postgres
+      - prometheus
+    environment:
+      DATA_SOURCE_USER: ${POSTGRES_USER}
+      DATA_SOURCE_PASS: ${POSTGRES_PASSWORD}
+      DATA_SOURCE_URI: ${POSTGRES_URL}
+    networks:
+      - microservice
+
 volumes:
   pgdata:
+  prometheus-data:
+  alertmanager-data:
 
 networks:
   microservice:
