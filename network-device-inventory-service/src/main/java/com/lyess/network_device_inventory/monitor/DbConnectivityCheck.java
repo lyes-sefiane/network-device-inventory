@@ -34,7 +34,7 @@ public class DbConnectivityCheck implements HealthIndicator {
     }
 
     private int check() {
-       List<Object> results = jdbcTemplate.query("select 1 from dual", new SingleColumnRowMapper<>());
+       List<Object> results = jdbcTemplate.query("select 1", new SingleColumnRowMapper<>());
        return results.size();
     }
 }
