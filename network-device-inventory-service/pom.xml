@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.lyess</groupId>
-	<artifactId>network-device-inventory</artifactId>
+	<artifactId>network-device-inventory-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>network-device-inventory</name>
-	<description>Network Device Inventory Microservice</description>
+	<name>network-device-inventory-service</name>
+	<description>Network Device Inventory Service</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>1.5.7</version>
+			<version>1.6.7</version>
 		</dependency>
 	</dependencies>
 
