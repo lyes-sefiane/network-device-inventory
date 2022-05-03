@@ -56,6 +56,7 @@ services:
       SPRING_DATASOURCE_INITIALIZATION_MODE: ${SPRING_DATASOURCE_INITIALIZATION_MODE}
     depends_on:
       - postgres
+      - consul
     networks:
       - microservice
 
@@ -66,8 +67,6 @@ services:
     restart: always
     ports:
       - ${CONSUL_PORT}:${CONSUL_PORT}
-    volumes:
-      - ../consul/config.json:/consul/config/config.json
     networks:
       - microservice
     environment:
@@ -85,8 +84,15 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.enable-lifecycle'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
     depends_on:
+      - node-exporter
+      - postgres-exporter
       - cadvisor
+      - alertmanager
+      - consul
     networks:
       - microservice
 
@@ -146,7 +152,6 @@ services:
       - ${POSTGRES_EXPORTER_PORT}:${POSTGRES_EXPORTER_PORT}
     depends_on:
       - postgres
-      - prometheus
     environment:
       DATA_SOURCE_USER: ${POSTGRES_USER}
       DATA_SOURCE_PASS: ${POSTGRES_PASSWORD}
