@@ -29,7 +29,7 @@ services:
       FLYWAY_PASSWORD: ${POSTGRES_PASSWORD}
       FLYWAY_URL: ${POSTGRES_URL}
     volumes:
-      - ./flyway/sql_versions:/flyway/sql
+      - ./flyway-service/sql_versions:/flyway/sql
     depends_on:
       - postgres
     networks:
@@ -79,7 +79,7 @@ services:
     ports:
       - ${PROMETHEUS_PORT}:${PROMETHEUS_PORT}
     volumes:
-      - ../prometheus:/etc/prometheus
+      - ./prometheus:/etc/prometheus
       - prometheus-data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -103,7 +103,7 @@ services:
     ports:
       - ${ALERT_MANAGER_PORT}:${ALERT_MANAGER_PORT}
     volumes:
-      - ../alertmanager:/etc/alertmanager
+      - ./alertmanager:/etc/alertmanager
       - alertmanager-data:/data
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
@@ -115,6 +115,7 @@ services:
   node-exporter:
     image: prom/node-exporter
     container_name: node-exporter
+    privileged: true
     restart: on-failure
     ports:
       - ${NODE_EXPORTER_PORT}:${NODE_EXPORTER_PORT}
@@ -138,9 +139,16 @@ services:
       - ${CADVISOR_HOST_PORT}:${CADVISOR_CONTAINER_PORT}
     volumes:
       - /:/rootfs:ro
-      - /var/run:/var/run:rw
+      - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+      - /etc/machine-id:/etc/machine-id:ro
+      - /var/lib/dbus/machine-id:/var/lib/dbus/machine-id:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    devices:
+      - /dev/kmsg:/dev/kmsg
     networks:
       - microservice
 
@@ -153,9 +161,7 @@ services:
     depends_on:
       - postgres
     environment:
-      DATA_SOURCE_USER: ${POSTGRES_USER}
-      DATA_SOURCE_PASS: ${POSTGRES_PASSWORD}
-      DATA_SOURCE_URI: ${POSTGRES_URL}
+      DATA_SOURCE_NAME: ${POSTGRES_EXPORTER_DATA_SOURCE_NAME}
     networks:
       - microservice
 
