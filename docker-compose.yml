@@ -103,7 +103,7 @@ services:
     ports:
       - ${ALERT_MANAGER_PORT}:${ALERT_MANAGER_PORT}
     volumes:
-      - ./alertmanager:/etc/alertmanager
+      - ./alertmanager-service:/etc/alertmanager
       - alertmanager-data:/data
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
