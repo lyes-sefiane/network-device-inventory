@@ -3,7 +3,8 @@ global:
   resolve_timeout: 1m
 
   # The API URL to use for Slack notifications.
-  slack_api_url: 'https://hooks.slack.com/services/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'
+  slack_api_url: <ADD_YOUR_SLACK_API_URL>
+
 
 # The root node of the routing tree.
 route:
