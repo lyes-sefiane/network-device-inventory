@@ -3,6 +3,8 @@ services:
   postgres:
     image: postgres:latest
     container_name: postgreSQL
+    profiles:
+      - inventory
     restart: on-failure
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
@@ -23,6 +25,8 @@ services:
   flyway:
     image: flyway/flyway:latest
     container_name: flyway
+    profiles:
+      - inventory
     command: -locations=filesystem:/flyway/sql -connectRetries=60 migrate
     environment:
       FLYWAY_USER: ${POSTGRES_USER}
@@ -38,6 +42,9 @@ services:
   network-device-inventory:
     image: lsefiane/network-device-inventory:latest
     container_name: network-device-inventory
+    profiles:
+      - inventory
+      - monitoring
     restart: on-failure
     ports:
       - ${NETWORK_DEVICE_INVENTORY_PORT}:${NETWORK_DEVICE_INVENTORY_PORT}
@@ -58,7 +65,6 @@ services:
       SPRING_CLOUD_CONSUL_HOST: ${SPRING_CLOUD_CONSUL_HOST}
       SPRING_CLOUD_CONSUL_PORT: ${SPRING_CLOUD_CONSUL_PORT}
       SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKURL: ${SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKURL}
-
     depends_on:
       - postgres
       - consul
@@ -68,6 +74,9 @@ services:
   consul:
     image: consul:latest
     container_name: consul
+    profiles:
+      - inventory
+      - monitoring
     command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
     restart: always
     ports:
@@ -80,6 +89,8 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
+    profiles:
+      - monitoring
     restart: unless-stopped
     ports:
       - ${PROMETHEUS_PORT}:${PROMETHEUS_PORT}
@@ -104,6 +115,8 @@ services:
   alertmanager:
     image: prom/alertmanager:latest
     container_name: alertmanager
+    profiles:
+      - monitoring
     restart: unless-stopped
     ports:
       - ${ALERT_MANAGER_PORT}:${ALERT_MANAGER_PORT}
@@ -120,6 +133,8 @@ services:
   node-exporter:
     image: prom/node-exporter
     container_name: node-exporter
+    profiles:
+      - monitoring
     privileged: true
     restart: on-failure
     ports:
@@ -139,6 +154,8 @@ services:
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
+    profiles:
+      - monitoring
     restart: on-failure
     ports:
       - ${CADVISOR_HOST_PORT}:${CADVISOR_CONTAINER_PORT}
@@ -160,6 +177,8 @@ services:
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter:latest
     container_name: postgres-exporter
+    profiles:
+      - monitoring
     restart: on-failure
     ports:
       - ${POSTGRES_EXPORTER_PORT}:${POSTGRES_EXPORTER_PORT}
