@@ -20,6 +20,12 @@
 
 * [lyes-s.github.io/network-device-inventory-service/](https://github.com/lyes-s/network-device-inventory/tree/master/network-device-inventory-service)
 
+## Enhancements
+
+* Secure Network Device Inventory Service with [Keycloak](https://www.keycloak.org/).
+* PostgreSQL Horizontal Scaling ([Options](https://www.highgo.ca/2021/08/09/horizontal-scalability-options-in-postgresql/)).
+* Docker Swarm Stack Deployment ([Example](https://github.com/lyes-s/publisher-subscriber-microservices/wiki/Docker-Swarm)).
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
