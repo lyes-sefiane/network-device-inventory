@@ -1,4 +1,4 @@
-# Network Device Inventory Restful Web Service
+# Network Device Inventory Microservices
 
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/lyes-s/network-device-inventory/Java%20CI%20with%20Maven/master)
 [![CodeQL](https://github.com/lyes-s/network-device-inventory/workflows/CodeQL/badge.svg)](https://github.com/lyes-s/network-device-inventory/actions?query=workflow%3ACodeQL)
