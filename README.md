@@ -9,19 +9,16 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/lyes-s/network-device-inventory?style=social)
 [![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/lyes-s/network-device-inventory/blob/master/LICENSE.md)
 
-## OpenAPI/Swagger Documentation
 
-* [lyes-s.github.io/network-device-inventory/](https://lyes-s.github.io/network-device-inventory/)
+## Network Device Inventory Microservices Wiki
 
-## Network Device Inventory Wiki
+* [lyes-s/network-device-inventory-microservices/wiki](https://github.com/lyes-s/network-device-inventory/wiki)
 
-* [lyes-s/network-device-inventory/wiki](https://github.com/lyes-s/network-device-inventory/wiki)
+## Services Documentation
 
-## Enhancements
+### Network Device Inventory Service Documentation
 
-* Secure Network Device Inventory RESTful API with [Keycloak](https://www.keycloak.org/).
-* PostgreSQL Horizontal Scaling ([Options](https://www.highgo.ca/2021/08/09/horizontal-scalability-options-in-postgresql/)).
-* Docker Swarm Stack Deployment ([Example](https://github.com/lyes-s/publisher-subscriber-microservices/wiki/Docker-Swarm)).
+* [lyes-s.github.io/network-device-inventory-service/](https://github.com/lyes-s/network-device-inventory/tree/master/network-device-inventory-service)
 
 ## Contributing
 
