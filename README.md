@@ -18,7 +18,7 @@
 
 ### Network Device Inventory Service Documentation
 
-* [lyes-s.github.io/network-device-inventory-service/](https://github.com/lyes-s/network-device-inventory/tree/master/network-device-inventory-service)
+* [lyes-s/network-device-inventory-service/](https://github.com/lyes-s/network-device-inventory/tree/master/network-device-inventory-service)
 
 ## Enhancements
 
