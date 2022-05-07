@@ -51,7 +51,7 @@ do
     "Docker Compose Up")
           echo "Docker Compose Up ...";
           docker-compose pull network-device-inventory && \
-          docker-compose -f docker-compose.yml --env-file .env up -d;
+          docker-compose -f docker-compose.yml --profile inventory --env-file .env up -d;
           break;;
 
     # Choice : 2
