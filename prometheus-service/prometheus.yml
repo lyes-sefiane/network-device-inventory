@@ -37,6 +37,15 @@ scrape_configs:
           - postgres-exporter:9187
           - alertmanager:9093
 
+  - job_name: consul
+    metrics_path: /v1/agent/metrics
+    scrape_interval: 5s
+    params:
+      format: ['prometheus']
+    static_configs:
+      - targets:
+          - consul:8500
+
   - job_name: network-device-inventory
     metrics_path: /inventory/api/actuator/prometheus
     scrape_interval: 5s
