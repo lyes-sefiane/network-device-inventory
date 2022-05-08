@@ -6,8 +6,8 @@ services:
     profiles:
       - inventory
     restart: on-failure
-    ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    expose:
+      - ${POSTGRES_PORT}
     healthcheck:
       test: pg_isready -d ${POSTGRES_DB} -U ${POSTGRES_USER}
       timeout: 45s
@@ -20,7 +20,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - microservice
+      - inventory
 
   flyway:
     image: flyway/flyway:latest
@@ -37,14 +37,13 @@ services:
     depends_on:
       - postgres
     networks:
-      - microservice
+      - inventory
 
   network-device-inventory:
     image: lsefiane/network-device-inventory:latest
     container_name: network-device-inventory
     profiles:
       - inventory
-      - monitoring
     restart: on-failure
     ports:
       - ${NETWORK_DEVICE_INVENTORY_PORT}:${NETWORK_DEVICE_INVENTORY_PORT}
@@ -69,22 +68,36 @@ services:
       - postgres
       - consul
     networks:
-      - microservice
+      - inventory
 
   consul:
     image: consul:latest
     container_name: consul
     profiles:
       - inventory
-      - monitoring
     command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
     restart: always
     ports:
       - ${CONSUL_PORT}:${CONSUL_PORT}
-    networks:
-      - microservice
     environment:
       - CONSUL_BIND_INTERFACE=${CONSUL_BIND_INTERFACE}
+    networks:
+      - inventory
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    container_name: postgres-exporter
+    profiles:
+      - monitoring
+    restart: on-failure
+    expose:
+      - ${POSTGRES_EXPORTER_PORT}
+    depends_on:
+      - postgres
+    environment:
+      DATA_SOURCE_NAME: ${POSTGRES_EXPORTER_DATA_SOURCE_NAME}
+    networks:
+      - inventory
 
   prometheus:
     image: prom/prometheus:latest
@@ -110,7 +123,8 @@ services:
       - alertmanager
       - consul
     networks:
-      - microservice
+      - inventory
+      - monitoring
 
   alertmanager:
     image: prom/alertmanager:latest
@@ -118,8 +132,8 @@ services:
     profiles:
       - monitoring
     restart: unless-stopped
-    ports:
-      - ${ALERT_MANAGER_PORT}:${ALERT_MANAGER_PORT}
+    expose:
+      - ${ALERT_MANAGER_PORT}
     volumes:
       - ./alertmanager-service:/etc/alertmanager
       - alertmanager-data:/data
@@ -127,7 +141,7 @@ services:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--log.level=debug'
     networks:
-      - microservice
+      - monitoring
 
 
   node-exporter:
@@ -137,8 +151,8 @@ services:
       - monitoring
     privileged: true
     restart: on-failure
-    ports:
-      - ${NODE_EXPORTER_PORT}:${NODE_EXPORTER_PORT}
+    expose:
+      - ${NODE_EXPORTER_PORT}
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -149,7 +163,7 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     networks:
-      - microservice
+      - monitoring
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
@@ -157,8 +171,8 @@ services:
     profiles:
       - monitoring
     restart: on-failure
-    ports:
-      - ${CADVISOR_HOST_PORT}:${CADVISOR_CONTAINER_PORT}
+    expose:
+      - ${CADVISOR_CONTAINER_PORT}
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -172,22 +186,7 @@ services:
     devices:
       - /dev/kmsg:/dev/kmsg
     networks:
-      - microservice
-
-  postgres-exporter:
-    image: prometheuscommunity/postgres-exporter:latest
-    container_name: postgres-exporter
-    profiles:
       - monitoring
-    restart: on-failure
-    ports:
-      - ${POSTGRES_EXPORTER_PORT}:${POSTGRES_EXPORTER_PORT}
-    depends_on:
-      - postgres
-    environment:
-      DATA_SOURCE_NAME: ${POSTGRES_EXPORTER_DATA_SOURCE_NAME}
-    networks:
-      - microservice
 
 volumes:
   pgdata:
@@ -195,4 +194,5 @@ volumes:
   alertmanager-data:
 
 networks:
-  microservice:
+  inventory:
+  monitoring:
