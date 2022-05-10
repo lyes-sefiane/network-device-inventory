@@ -188,10 +188,30 @@ services:
     networks:
       - monitoring
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    profiles:
+      - monitoring
+    restart: unless-stopped
+    ports:
+      - ${GRAFANA_PORT}:${GRAFANA_PORT}
+    depends_on:
+      - prometheus
+    volumes:
+      - ./grafana-service/provisioning:/etc/grafana/provisioning
+      - ./grafana-service/grafana.ini:/etc/grafana/grafana.ini
+      - grafana-storage:/var/lib/grafana
+    environment:
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: ${GRAFANA_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH}
+    networks:
+      - monitoring
+
 volumes:
   pgdata:
   prometheus-data:
   alertmanager-data:
+  grafana-storage:
 
 networks:
   inventory:
