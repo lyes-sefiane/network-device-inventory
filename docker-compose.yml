@@ -93,7 +93,7 @@ services:
     image: nginx:latest
     restart: on-failure
     ports:
-      - 80:80
+      - ${NGINX_PORT}:${NGINX_PORT}
     volumes:
       - ./nginx-service/conf.d:/etc/nginx/conf.d
     depends_on:
