@@ -45,8 +45,8 @@ services:
     profiles:
       - inventory
     restart: on-failure
-    ports:
-      - ${NETWORK_DEVICE_INVENTORY_PORT}:${NETWORK_DEVICE_INVENTORY_PORT}
+    expose:
+      - ${NETWORK_DEVICE_INVENTORY_PORT}
     healthcheck:
       test: wget --no-verbose --spider http://localhost:8080/inventory/api/actuator/health || exit 1
       interval: 25s
@@ -80,12 +80,28 @@ services:
       - inventory
     command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
     restart: always
-    ports:
-      - ${CONSUL_PORT}:${CONSUL_PORT}
+    expose:
+      - ${CONSUL_PORT}
     environment:
       - CONSUL_BIND_INTERFACE=${CONSUL_BIND_INTERFACE}
+      - UI_CONTENT_PATH=${UI_CONTENT_PATH}
     networks:
       - inventory
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: on-failure
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx-service/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - network-device-inventory
+      - grafana
+    networks:
+      - inventory
+      - monitoring
 
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter:latest
@@ -108,8 +124,8 @@ services:
     profiles:
       - monitoring
     restart: unless-stopped
-    ports:
-      - ${PROMETHEUS_PORT}:${PROMETHEUS_PORT}
+    expose:
+      - ${PROMETHEUS_PORT}
     volumes:
       - ./prometheus-service:/etc/prometheus
       - prometheus-data:/prometheus
@@ -197,8 +213,8 @@ services:
     profiles:
       - monitoring
     restart: unless-stopped
-    ports:
-      - ${GRAFANA_PORT}:${GRAFANA_PORT}
+    expose:
+      - ${GRAFANA_PORT}
     depends_on:
       - prometheus
     volumes:
