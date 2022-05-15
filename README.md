@@ -9,10 +9,32 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/lyes-s/network-device-inventory?style=social)
 [![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/lyes-s/network-device-inventory/blob/master/LICENSE.md)
 
-
 ## Network Device Inventory Microservices Wiki
 
 * [lyes-s/network-device-inventory-microservices/wiki](https://github.com/lyes-s/network-device-inventory/wiki)
+
+
+## Development Environment
+
+```
+COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
+```
+
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/monitoring-system-design.PNG)
+
+## Requirements
+```
+1. Java 11.x.y
+
+2. Maven 3.x.y
+
+3. Docker 3.x.y
+```
+
+## Git Clone
+```
+https://github.com/lyes-s/network-device-inventory.git
+```
 
 ## Services Documentation
 
@@ -20,11 +42,14 @@
 
 * [lyes-s/network-device-inventory-service/](https://github.com/lyes-s/network-device-inventory/tree/master/network-device-inventory-service)
 
+### Microservices Monitoring Documentation
+
+* [lyes-s/network-device-inventory/microservices-monitoring/](https://github.com/lyes-s/network-device-inventory/wiki/Microservices-Monitoring)
+
 ## Enhancements
 
 * Secure Network Device Inventory Service with [Keycloak](https://www.keycloak.org/).
-* PostgreSQL Horizontal Scaling ([Options](https://www.highgo.ca/2021/08/09/horizontal-scalability-options-in-postgresql/)).
-* Docker Swarm Stack Deployment ([Example](https://github.com/lyes-s/publisher-subscriber-microservices/wiki/Docker-Swarm)).
+* Kubernetes Deployment.
 
 ## Contributing
 
