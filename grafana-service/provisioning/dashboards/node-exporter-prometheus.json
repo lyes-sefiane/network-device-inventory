@@ -30,7 +30,7 @@
     }
   ],
   "id": null,
-  "title": "Node Exporter Server Metrics",
+  "title": "Node exporter server metrics. (Node-Exporter/Prometheus)",
   "description": "Dashboard to view multiple servers",
   "tags": [
     "prometheus"
@@ -1512,7 +1512,7 @@
     }
   ],
   "time": {
-    "from": "now-7d",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
