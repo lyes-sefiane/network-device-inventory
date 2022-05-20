@@ -14,13 +14,26 @@
 * [lyes-s/network-device-inventory-microservices/wiki](https://github.com/lyes-s/network-device-inventory/wiki)
 
 
-## Development Environment
+## Network Device Inventory Service Documentation
+
+* [lyes-s/network-device-inventory-service/](https://github.com/lyes-s/network-device-inventory/tree/master/network-device-inventory-service)
+
+```
+COMPOSE_PROFILES=inventory docker-compose --env-file .env  up -d
+```
+
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/inventory-restful-web-service.PNG)
+
+## Monitoring Documentation
+
+* [lyes-s/network-device-inventory/microservices-monitoring/](https://github.com/lyes-s/network-device-inventory/wiki/Microservices-Monitoring)
 
 ```
 COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
 ```
 
-![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/monitoring-system-design.PNG)
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/monitoring-system-design-v2.PNG)
+
 
 ## Requirements
 ```
@@ -36,20 +49,15 @@ COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
 https://github.com/lyes-s/network-device-inventory.git
 ```
 
-## Services Documentation
+## Features
 
-### Network Device Inventory Service Documentation
-
-* [lyes-s/network-device-inventory-service/](https://github.com/lyes-s/network-device-inventory/tree/master/network-device-inventory-service)
-
-### Microservices Monitoring Documentation
-
-* [lyes-s/network-device-inventory/microservices-monitoring/](https://github.com/lyes-s/network-device-inventory/wiki/Microservices-Monitoring)
-
-## Enhancements
-
+* Build Docker Images In a [GitLab](https://about.gitlab.com/) CI Pipeline
 * Secure Network Device Inventory Service with [Keycloak](https://www.keycloak.org/).
-* Kubernetes Deployment.
+* Design and Develop a Graph Service with [GO](https://go.dev/)
+* [Kafka](https://kafka.apache.org/) integration 
+* [Graph Visualization](https://github.com/lyes-s/graph-visualization) Integration
+* Centralized Tracing with [ELK Stack](https://www.elastic.co/elastic-stack/)
+* [Kubernetes](https://kubernetes.io/) Deployment.
 
 ## Contributing
 
