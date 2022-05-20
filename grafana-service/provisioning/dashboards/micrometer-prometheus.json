@@ -69,7 +69,7 @@
   "hideControls": false,
   "id": null,
   "links": [],
-  "refresh": "30s",
+  "refresh": "5s",
   "rows": [
     {
       "collapse": false,
@@ -3144,7 +3144,7 @@
     ]
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -3174,6 +3174,6 @@
     ]
   },
   "timezone": "browser",
-  "title": "JVM (Micrometer)",
+  "title": "Java, Spring Boot applications metrics. (Micrometer/Prometheus)",
   "version": 24
 }
