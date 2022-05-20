@@ -3142,7 +3142,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -3171,7 +3171,7 @@
     ]
   },
   "timezone": "",
-  "title": "PostgreSQL Database",
+  "title": "Postgres exporter metrics. (Postgres-exporter/Prometheus)",
   "uid": "000000039",
   "version": 1
 }
