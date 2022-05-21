@@ -26,7 +26,7 @@ COMPOSE_PROFILES=inventory docker-compose --env-file .env  up -d
 
 ## Monitoring Documentation
 
-* [lyes-s/network-device-inventory/microservices-monitoring/](https://github.com/lyes-s/network-device-inventory/wiki/Microservices-Monitoring)
+* [lyes-s/network-device-inventory/monitoring/](https://github.com/lyes-s/network-device-inventory/wiki/Monitoring)
 
 ```
 COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
@@ -49,15 +49,15 @@ COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
 https://github.com/lyes-s/network-device-inventory.git
 ```
 
-## Features
+## Features Roadmap
 
 * Build Docker Images In a [GitLab](https://about.gitlab.com/) CI Pipeline
+* Design and Develop a Graph Service with [GO](https://go.dev/).
+* Integrate & Implement [CQRS](https://www.confluent.io/blog/event-sourcing-cqrs-stream-processing-apache-kafka-whats-connection/) with [Kafka](https://kafka.apache.org/). 
+* Integrate [Graph Visualization](https://github.com/lyes-s/graph-visualization).
 * Secure Network Device Inventory Service with [Keycloak](https://www.keycloak.org/).
-* Design and Develop a Graph Service with [GO](https://go.dev/)
-* [Kafka](https://kafka.apache.org/) integration 
-* [Graph Visualization](https://github.com/lyes-s/graph-visualization) Integration
-* Centralized Tracing with [ELK Stack](https://www.elastic.co/elastic-stack/)
-* [Kubernetes](https://kubernetes.io/) Deployment.
+* Centralize Tracing with [ELK Stack](https://www.elastic.co/elastic-stack/).
+* Deploy to [Kubernetes](https://kubernetes.io/).
 
 ## Contributing
 
