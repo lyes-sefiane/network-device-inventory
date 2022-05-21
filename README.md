@@ -14,7 +14,7 @@
 * [lyes-s/network-device-inventory-microservices/wiki](https://github.com/lyes-s/network-device-inventory/wiki)
 
 
-## Network Device Inventory Service Documentation
+### Network Device Inventory Service Documentation
 
 * [lyes-s/network-device-inventory-service/](https://github.com/lyes-s/network-device-inventory/tree/master/network-device-inventory-service)
 
@@ -24,7 +24,7 @@ COMPOSE_PROFILES=inventory docker-compose --env-file .env  up -d
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/inventory-restful-web-service.PNG)
 
-## Monitoring Documentation
+### Monitoring Documentation
 
 * [lyes-s/network-device-inventory/monitoring/](https://github.com/lyes-s/network-device-inventory/wiki/Monitoring)
 
