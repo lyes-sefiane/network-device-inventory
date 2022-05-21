@@ -55,7 +55,7 @@ https://github.com/lyes-s/network-device-inventory.git
 * Design and Develop a Graph Service with [GO](https://go.dev/)
 * Integrate & Implement [CQRS](https://www.confluent.io/blog/event-sourcing-cqrs-stream-processing-apache-kafka-whats-connection/) with [Kafka](https://kafka.apache.org/)
 * Integrate [Graph Visualization](https://github.com/lyes-s/graph-visualization)
-* Secure Network Device Inventory Service with [Keycloak](https://www.keycloak.org/)
+* Secure Network Device Inventory & Graph Services with [Keycloak](https://www.keycloak.org/)
 * Centralize Tracing with [ELK Stack](https://www.elastic.co/elastic-stack/)
 * Deploy to [Kubernetes](https://kubernetes.io/)
 
