@@ -6,9 +6,6 @@ version: 2.1
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   network-device-inventory-service-maven-build:
-
-    working_directory: ~/project/network-device-inventory-service
-
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
@@ -28,7 +25,7 @@ jobs:
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - run:
           command: mvn clean install
-          working_directory: $CIRCLE_WORKING_DIRECTORY
+          working_directory: ~/project/network-device-inventory-service
       - store_test_results:
           path: target/surefire-reports
       - store_artifacts:
