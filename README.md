@@ -1,5 +1,5 @@
 # Network Device Inventory Microservices
-
+[![CircleCI](https://circleci.com/gh/lyes-s/network-device-inventory/tree/master.svg?style=shield)](https://circleci.com/gh/lyes-s/network-device-inventory/tree/master)
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/lyes-s/network-device-inventory/Java%20CI%20with%20Maven/master)
 [![CodeQL](https://github.com/lyes-s/network-device-inventory/workflows/CodeQL/badge.svg)](https://github.com/lyes-s/network-device-inventory/actions?query=workflow%3ACodeQL)
 ![GitHub top language](https://img.shields.io/github/languages/top/lyes-s/network-device-inventory)
