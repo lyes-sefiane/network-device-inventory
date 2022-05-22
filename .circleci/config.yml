@@ -10,26 +10,26 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
       - image: maven:3-amazoncorretto-11
+
+    # Working Directory
+    working_directory: ~/network-device-inventory-service
+
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
-      - run:
-          command: find . -name 'pom.xml' | sort | xargs cat > /tmp/maven_cache_seed
-          working_directory: ~/project/network-device-inventory-service
       - restore_cache:
-          key: circleci-java-maven-{{ checksum "/tmp/maven_cache_seed" }}
+          key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - run:
           command: mvn clean install
-          working_directory: ~/project/network-device-inventory-service
       - save_cache:
           paths:
             - ~/.m2/repository
-          key: circleci-java-maven-{{ checksum "/tmp/maven_cache_seed" }}
+          key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - store_test_results:
-          path: ~/project/network-device-inventory-service/target/surefire-reports
+          path: target/surefire-reports
       - store_artifacts:
-          path: ~/project/network-device-inventory-service/target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
+          path: target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
