@@ -27,7 +27,7 @@ jobs:
             - ~/.m2
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - run:
-          command: mvn clean
+          command: mvn clean install
           working_directory: $CIRCLE_WORKING_DIRECTORY
       - store_test_results:
           path: target/surefire-reports
