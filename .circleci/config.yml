@@ -11,9 +11,6 @@ jobs:
     docker:
       - image: maven:3-amazoncorretto-11
 
-    # Working Directory
-    working_directory: ~/project/network-device-inventory-service
-
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
@@ -22,6 +19,7 @@ jobs:
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - run:
           command: mvn clean install
+          working_directory: ~/project/network-device-inventory-service
       - save_cache:
           paths:
             - ~/.m2/repository
