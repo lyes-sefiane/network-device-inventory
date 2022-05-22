@@ -6,6 +6,9 @@ version: 2.1
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   network-device-inventory-service-maven-build:
+
+    working_directory: ~/network-device-inventory-service
+
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
@@ -18,16 +21,17 @@ jobs:
       - restore_cache:
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - run:
-          command: mvn clean install
-          working_directory: ~/project/network-device-inventory-service
+          command: mvn dependency:go-offline
       - save_cache:
           paths:
-            - ~/.m2/repository
+            - ~/.m2
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
+      - run:
+          command: mvn clean install
       - store_test_results:
-          path: ~/project/network-device-inventory-service/target/surefire-reports
+          path: target/surefire-reports
       - store_artifacts:
-          path: ~/project/network-device-inventory-service/target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
+          path: target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
