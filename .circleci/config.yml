@@ -27,11 +27,12 @@ jobs:
             - ~/.m2
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - run:
-          command: mvn clean install
+          command: mvn clean
+          working_directory: $CIRCLE_WORKING_DIRECTORY
       - store_test_results:
-          path: $CIRCLE_WORKING_DIRECTORY/target/surefire-reports
+          path: target/surefire-reports
       - store_artifacts:
-          path: $CIRCLE_WORKING_DIRECTORY/target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
+          path: target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
