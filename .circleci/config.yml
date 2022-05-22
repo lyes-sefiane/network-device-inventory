@@ -11,6 +11,8 @@ jobs:
     docker:
       - image: maven:3-amazoncorretto-11
 
+    working_directory: ~/project/network-device-inventory-service
+
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
@@ -38,8 +40,6 @@ jobs:
           paths:
             - network-device-inventory-service-0.0.1-SNAPSHOT.jar
 
-  network-device-inventory-service-docker-build-push-to-dockerhub:
-
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -47,9 +47,3 @@ workflows:
   network-device-inventory-service-workflow:
     jobs:
       - network-device-inventory-service-maven-build
-      - network-device-inventory-service-docker-build-push-to-dockerhub
-        filters:
-          branches:
-            only: master
-          requires:
-            - network-device-inventory-service-maven-build
