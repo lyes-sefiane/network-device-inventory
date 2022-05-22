@@ -28,8 +28,10 @@ jobs:
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - store_test_results:
           path: target/surefire-reports
+          destination: network-device-inventory-service
       - store_artifacts:
           path: target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
+          destination: network-device-inventory-service
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
