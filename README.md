@@ -49,9 +49,9 @@ COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
 https://github.com/lyes-s/network-device-inventory.git
 ```
 
-## Features Roadmap
+## Next Features : Roadmap
 
-* Build Docker Images In a [GitLab](https://about.gitlab.com/) CI Pipeline
+* Build Docker Images In a [CircleCI](https://circleci.com/) Pipeline & Push them to [DockerHub](https://hub.docker.com/)
 * Design and Develop a Graph Service with [GO](https://go.dev/)
 * Integrate & Implement [CQRS](https://www.confluent.io/blog/event-sourcing-cqrs-stream-processing-apache-kafka-whats-connection/) with [Kafka](https://kafka.apache.org/)
 * Integrate [Graph Visualization](https://github.com/lyes-s/graph-visualization)
