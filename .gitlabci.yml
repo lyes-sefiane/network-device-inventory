@@ -1,0 +1,10 @@
+stages:
+  - triggers
+
+network-device-inventory-service :
+stage: triggers
+trigger:
+include: network-device-inventory-service/.gitlab-ci.yml
+rules:
+  - changes:
+  - network-device-inventory-service/.gitlab-ci.yml
