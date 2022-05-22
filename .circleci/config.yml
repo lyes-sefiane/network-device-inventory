@@ -27,9 +27,9 @@ jobs:
           command: mvn clean install
           working_directory: ~/project/network-device-inventory-service
       - store_test_results:
-          path: target/surefire-reports
+          path: ~/project/network-device-inventory-service/target/surefire-reports
       - store_artifacts:
-          path: target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
+          path: ~/project/network-device-inventory-service/target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
