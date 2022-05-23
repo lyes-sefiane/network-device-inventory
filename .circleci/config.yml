@@ -72,7 +72,10 @@ jobs:
           at: /tmp/workspace
       - run:
           name: Load Docker image
-          command: docker load --input /tmp/workspace/image.tar
+          command: |
+            for f in /tmp/workspace/*.tar; do
+              cat $f | docker load
+            done
       - run:
           name: Publish Docker image
           command: |
