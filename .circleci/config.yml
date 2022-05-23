@@ -79,6 +79,9 @@ jobs:
             docker tag $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
             docker tag $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1
             docker image push --all-tags $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE
+      - run:
+          name: Logout from DockerHub
+          command: docker logout
             
 
 
