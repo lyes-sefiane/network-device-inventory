@@ -37,6 +37,24 @@ jobs:
           paths:
             - network-device-inventory-service-0.0.1-SNAPSHOT.jar
 
+  network-device-inventory-service-docker-build-push-to-dockerhub:
+    docker:
+      - image: amazoncorretto:11-alpine
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project/network-device-inventory-service/target
+      - setup_remote_docker
+      - run:
+        name: Publish Docker Image
+        command: |
+          echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+          docker build ./network-device-inventory-service/Dockerfile -t $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME
+          docker tag $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
+          docker tag $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1
+          docker push $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
+          docker push $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1
+
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -44,3 +62,9 @@ workflows:
   network-device-inventory-service-workflow:
     jobs:
       - network-device-inventory-service-maven-build
+      - network-device-inventory-service-docker-build-push-to-dockerhub
+        filters:
+          branches:
+            only: master
+          requires:
+            - network-device-inventory-service-maven-build
