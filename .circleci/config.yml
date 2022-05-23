@@ -46,14 +46,13 @@ jobs:
           at: ~/project/network-device-inventory-service/target
       - setup_remote_docker
       - run:
-        name: Publish Docker Image
-        command: |
-          echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
-          docker build ./network-device-inventory-service/Dockerfile -t $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME
-          docker tag $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
-          docker tag $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1
-          docker push $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
-          docker push $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1
+          commands:
+            - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+            - docker build ./network-device-inventory-service/Dockerfile -t $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME
+            - docker tag $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
+            - docker tag $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1
+            - docker push $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
+            - docker push $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1
 
 
 # Invoke jobs via workflows
