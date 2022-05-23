@@ -91,7 +91,7 @@ jobs:
             for f in /tmp/workspace/*.tar; do
               cat $f | docker load
             done
-      -run:
+      - run:
           name: Login to DockerHub
           command: |
             echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin
