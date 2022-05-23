@@ -57,27 +57,12 @@ jobs:
           command: docker build -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1 ~/project/network-device-inventory-service/
       - run:
           name: Archive Docker image
-          command: docker save --output image.tar $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE
+          command: docker save --output image.tar $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1
       - persist_to_workspace:
           root: .
           paths:
             - ./image.tar
 
-  prometheus-service-docker-build:
-    executor: docker-publisher
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$PROMETHEUS_SERVICE ~/project/prometheus-service/
-      - run:
-          name: Archive Docker image
-          command: docker save --output image2.tar $CI_REGISTRY_USER/$PROMETHEUS_SERVICE
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./image2.tar
 
   network-device-inventory-service-docker-push:
     executor: docker-publisher
@@ -92,9 +77,7 @@ jobs:
           name: Publish Docker image
           command: |
             echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin
-            docker tag $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
-            docker tag $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1
-            docker image push --all-tags $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE
+            docker push $(docker image ls)
       - run:
           name: Logout from DockerHub
           command: docker logout
@@ -121,6 +104,3 @@ workflows:
             branches:
               only:
                 - master
-  prometheus-service-workflow:
-    jobs:
-      - prometheus-service-docker-build
