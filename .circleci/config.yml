@@ -1,6 +1,15 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine.
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
+
+
+executors:
+  docker-publisher:
+    environment:
+      IMAGE_TAG: $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
+    docker:
+      - image: docker:stable
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -16,12 +25,14 @@ jobs:
       - restore_cache:
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - run:
+          name: mvn dependency go offline
           command: mvn dependency:go-offline
       - save_cache:
           paths:
             - ~/.m2
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - run:
+          name: mvn clean install
           command: mvn clean install
           working_directory: ~/project/network-device-inventory-service
       - store_test_results:
@@ -36,20 +47,37 @@ jobs:
           paths:
             - network-device-inventory-service-0.0.1-SNAPSHOT.jar
 
-  network-device-inventory-service-docker-build-push-to-dockerhub:
-    docker:
-      - image: cimg/go:1.17
+  network-device-inventory-service-docker-build:
+    executor: docker-publisher
     steps:
       - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: docker build -t "${IMAGE_TAG}" ~/project/network-device-inventory-service/
+      - run:
+          name: Archive Docker image
+          command: docker save --output image.tar "${IMAGE_TAG}"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./image.tar
+
+  network-device-inventory-service-docker-push:
+    executor: docker-publisher
+    steps:
+      - setup_remote_docker
       - attach_workspace:
-          at: ~/project/network-device-inventory-service/target
-      - setup_remote_docker:
-          version: 20.10.14
-          docker_layer_caching: true
-      - run: |
-          docker build ~/project/network-device-inventory-service/ -t $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
-          echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin
-          docker push $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
+          at: /tmp/workspace
+      - run:
+          name: Load Docker image
+          command: docker load --input /tmp/workspace/image.tar
+      - run:
+          name: Publish Docker image
+          command: |
+            echo "${CI_REGISTRY_PASSWORD}" | docker login -u "${CI_REGISTRY_USER}" --password-stdin
+            docker push "${IMAGE_TAG}"
+            
 
 
 # Invoke jobs via workflows
@@ -58,9 +86,16 @@ workflows:
   network-device-inventory-service-workflow:
     jobs:
       - network-device-inventory-service-maven-build
-      - network-device-inventory-service-docker-build-push-to-dockerhub:
+      - network-device-inventory-service-docker-build:
           requires:
             - network-device-inventory-service-maven-build
+          filters:
+            branches:
+              only:
+                - master
+      - network-device-inventory-service-docker-push:
+          requires:
+            - network-device-inventory-service-docker-build
           filters:
             branches:
               only:
