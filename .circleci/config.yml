@@ -49,7 +49,7 @@ jobs:
           version: 20.10.14
           docker_layer_caching: true
       - run: |
-          docker build ~/project/network-device-inventory-service/Dockerfile -t $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
+          docker build ~/project/network-device-inventory-service/ -t $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
           echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin
           docker push $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
 
