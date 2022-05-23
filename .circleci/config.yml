@@ -38,7 +38,7 @@ jobs:
 
   network-device-inventory-service-docker-build-push-to-dockerhub:
     docker:
-      - image: amazoncorretto:11-alpine
+      - image: cimg/go:1.17
     steps:
       - checkout
       - attach_workspace:
