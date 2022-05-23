@@ -49,11 +49,8 @@ jobs:
       - run:
           command: |
             echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
-            docker build ./network-device-inventory-service/Dockerfile -t $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME
-            docker tag $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
-            docker tag $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1
+            docker build ./network-device-inventory-service/Dockerfile -t $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
             docker push $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
-            docker push $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1
 
 
 # Invoke jobs via workflows
