@@ -5,8 +5,6 @@ version: 2.1
 
 executors:
   docker-publisher:
-    environment:
-      IMAGE_TAG: '"${CI_REGISTRY_USER}"/"${CIRCLE_PROJECT_REPONAME}":latest'
     docker:
       - image: docker:stable
 
@@ -56,7 +54,7 @@ jobs:
           at: ~/project/network-device-inventory-service/target
       - run:
           name: Build Docker image
-          command: docker build -t $IMAGE_TAG ~/project/network-device-inventory-service/
+          command: docker build -t $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest ~/project/network-device-inventory-service/
       - run:
           name: Archive Docker image
           command: docker save --output image.tar $IMAGE_TAG
@@ -78,7 +76,7 @@ jobs:
           name: Publish Docker image
           command: |
             echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin
-            docker push $IMAGE_TAG
+            docker push $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
             
 
 
