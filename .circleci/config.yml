@@ -77,7 +77,10 @@ jobs:
           name: Publish Docker image
           command: |
             echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin
-            docker push $(docker image ls)
+            for image_name in $(docker images --format="{{.Repository}}:{{.Tag}}")
+            do
+              docker push $image_name
+            done
       - run:
           name: Logout from DockerHub
           command: docker logout
