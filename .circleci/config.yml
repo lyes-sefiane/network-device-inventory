@@ -6,7 +6,7 @@ version: 2.1
 executors:
   docker-publisher:
     environment:
-      IMAGE_TAG: $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
+      IMAGE_TAG: '"${CI_REGISTRY_USER}"/"${CIRCLE_PROJECT_REPONAME}":latest'
     docker:
       - image: docker:stable
 
