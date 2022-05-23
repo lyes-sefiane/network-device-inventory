@@ -5,7 +5,6 @@ version: 2.1
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   network-device-inventory-service-maven-build:
-    working_directory: ~/network-device-inventory-service
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
@@ -24,15 +23,15 @@ jobs:
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - run:
           command: mvn clean install
-          #working_directory: ~/project/network-device-inventory-service
+          working_directory: ~/project/network-device-inventory-service
       - store_test_results:
-          path: ~/network-device-inventory-service/target/surefire-reports
+          path: ~/project/network-device-inventory-service/target/surefire-reports
       - store_artifacts:
-          path: ~/network-device-inventory-service/target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
+          path: ~/project/network-device-inventory-service/target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
           # taken to be the root directory of the workspace.
-          root: ~/network-device-inventory-service/target
+          root: ~/project/network-device-inventory-service/target
           # Must be relative path from root
           paths:
             - network-device-inventory-service-0.0.1-SNAPSHOT.jar
@@ -43,7 +42,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/network-device-inventory-service/target
+          at: ~/project/network-device-inventory-service/target
       - setup_remote_docker:
           version: 20.10.14
           docker_layer_caching: true
