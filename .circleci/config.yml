@@ -57,7 +57,7 @@ jobs:
           command: docker build -t $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest ~/project/network-device-inventory-service/
       - run:
           name: Archive Docker image
-          command: docker save --output image.tar $IMAGE_TAG
+          command: docker save --output image.tar $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
       - persist_to_workspace:
           root: .
           paths:
