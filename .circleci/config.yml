@@ -76,8 +76,8 @@ jobs:
           name: Publish Docker image
           command: |
             echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin
-            docker tag $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
-            docker tag $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1
+            docker tag $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
+            docker tag $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1
             docker image push --all-tags $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE
             
 
