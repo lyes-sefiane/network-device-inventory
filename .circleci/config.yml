@@ -40,17 +40,18 @@ jobs:
 
   network-device-inventory-service-docker-build-push-to-dockerhub:
     docker:
-      - image: amazoncorretto:11-alpine
+      - image: cimg/go:1.17
     steps:
       - checkout
       - attach_workspace:
           at: ~/project/network-device-inventory-service/target
-      - setup_remote_docker
-      - run:
-          command: |
-            echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
-            docker build ./network-device-inventory-service/Dockerfile -t $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
-            docker push $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
+      - run: |
+          docker build ./network-device-inventory-service/Dockerfile -t $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
+          echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin
+          docker push $CI_REGISTRY_USER/$CIRCLE_PROJECT_REPONAME:latest
 
 
 # Invoke jobs via workflows
