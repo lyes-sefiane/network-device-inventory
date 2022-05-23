@@ -63,3 +63,8 @@ workflows:
     jobs:
       - network-device-inventory-service-maven-build
       - network-device-inventory-service-docker-build-push-to-dockerhub
+        required:
+          - network-device-inventory-service-maven-build
+        filters:
+          branches:
+            only: master
