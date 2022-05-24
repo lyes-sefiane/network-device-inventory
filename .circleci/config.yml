@@ -79,6 +79,22 @@ jobs:
           paths:
             - ./prometheus-service.tar
 
+  alertmanager-service-docker-build:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: docker build -t $CI_REGISTRY_USER/$ALERT_MANAGER_SERVICE:latest -t $CI_REGISTRY_USER/$ALERT_MANAGER_SERVICE:$CIRCLE_SHA1 ~/project/alertmanager-service/
+      - run:
+          name: Archive Docker image(s)
+          command: docker save --output alertmanager-service.tar $CI_REGISTRY_USER/$ALERT_MANAGER_SERVICE:latest $CI_REGISTRY_USER/$ALERT_MANAGER_SERVICE:$CIRCLE_SHA1
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./alertmanager-service.tar
+
   docker-publish:
     executor: docker-publisher
     steps:
@@ -126,10 +142,16 @@ workflows:
             branches:
               only:
                 - master
+      - alertmanager-service-docker-build:
+          filters:
+            branches:
+              only:
+                - master
       - docker-publish:
           requires:
             - network-device-inventory-service-docker-build
             - prometheus-service-docker-build
+            - alertmanager-service-docker-build
           filters:
             branches:
               only:
