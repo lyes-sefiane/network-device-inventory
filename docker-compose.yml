@@ -40,7 +40,7 @@ services:
       - inventory
 
   network-device-inventory:
-    image: lsefiane/network-device-inventory:latest
+    image: lsefiane/network-device-inventory-service:latest
     container_name: network-device-inventory
     profiles:
       - inventory
@@ -119,7 +119,7 @@ services:
       - inventory
 
   prometheus:
-    image: prom/prometheus:latest
+    image: lsefiane/prometheus-service:latest
     container_name: prometheus
     profiles:
       - monitoring
@@ -127,7 +127,6 @@ services:
     expose:
       - ${PROMETHEUS_PORT}
     volumes:
-      - ./prometheus-service:/etc/prometheus
       - prometheus-data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -208,7 +207,7 @@ services:
       - monitoring
 
   grafana:
-    image: grafana/grafana:latest
+    image: lsefiane/grafana-service:latest
     container_name: grafana
     profiles:
       - monitoring
@@ -218,8 +217,6 @@ services:
     depends_on:
       - prometheus
     volumes:
-      - ./grafana-service/provisioning:/etc/grafana/provisioning
-      - ./grafana-service/grafana.ini:/etc/grafana/grafana.ini
       - grafana-storage:/var/lib/grafana
     environment:
       GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: ${GRAFANA_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH}
