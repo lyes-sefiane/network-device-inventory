@@ -111,6 +111,22 @@ jobs:
           paths:
             - ./nginx-service.tar
 
+  flyway-service-docker-build:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: docker build -t $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest -t $CI_REGISTRY_USER/$FLYWAY_SERVICE:$CIRCLE_SHA1 ~/project/flyway-service/
+      - run:
+          name: Archive Docker image(s)
+          command: docker save --output flyway-service.tar $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest $CI_REGISTRY_USER/$FLYWAY_SERVICE:$CIRCLE_SHA1
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./flyway-service.tar
+
   docker-publish:
     executor: docker-publisher
     steps:
@@ -168,12 +184,18 @@ workflows:
             branches:
               only:
                 - master
+      - flyway-service-docker-build:
+          filters:
+            branches:
+              only:
+                - master
       - docker-publish:
           requires:
             - network-device-inventory-service-docker-build
             - prometheus-service-docker-build
             - grafana-service-docker-build
             - nginx-service-docker-build
+            - flyway-service-docker-build
           filters:
             branches:
               only:
