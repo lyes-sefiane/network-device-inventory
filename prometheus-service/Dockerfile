@@ -1,3 +1,2 @@
 FROM prom/prometheus
-ADD prometheus.yml /etc/prometheus/
-ADD rules.yml /etc/prometheus/
+ADD prometheus /etc/prometheus/
