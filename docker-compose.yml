@@ -23,7 +23,7 @@ services:
       - inventory
 
   flyway:
-    image: flyway/flyway:latest
+    image: lsefiane/flyway-service:latest
     container_name: flyway
     profiles:
       - inventory
@@ -32,8 +32,6 @@ services:
       FLYWAY_USER: ${POSTGRES_USER}
       FLYWAY_PASSWORD: ${POSTGRES_PASSWORD}
       FLYWAY_URL: ${POSTGRES_URL}
-    volumes:
-      - ./flyway-service/sql_versions:/flyway/sql
     depends_on:
       - postgres
     networks:
@@ -89,13 +87,11 @@ services:
       - inventory
 
   nginx:
+    image: lsefiane/nginx-service:latest
     container_name: nginx
-    image: nginx:latest
     restart: on-failure
     ports:
       - ${NGINX_PORT}:${NGINX_PORT}
-    volumes:
-      - ./nginx-service/conf.d:/etc/nginx/conf.d
     depends_on:
       - network-device-inventory
       - grafana
