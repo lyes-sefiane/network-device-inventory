@@ -50,6 +50,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+        docker_layer_caching: true
       - attach_workspace:
           at: ~/project/network-device-inventory-service/target
       - run:
@@ -68,6 +69,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+        docker_layer_caching: true
       - run:
           name: Build Docker image
           command: docker build -t $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest -t $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:$CIRCLE_SHA1 ~/project/prometheus-service/
@@ -84,6 +86,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+        docker_layer_caching: true
       - run:
           name: Build Docker image
           command: docker build -t $CI_REGISTRY_USER/$GRAFANA_SERVICE:latest -t $CI_REGISTRY_USER/$GRAFANA_SERVICE:$CIRCLE_SHA1 ~/project/grafana-service/
@@ -100,6 +103,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+        docker_layer_caching: true
       - run:
           name: Build Docker image
           command: docker build -t $CI_REGISTRY_USER/$NGINX_SERVICE:latest -t $CI_REGISTRY_USER/$NGINX_SERVICE:$CIRCLE_SHA1 ~/project/nginx-service/
@@ -116,6 +120,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+        docker_layer_caching: true
       - run:
           name: Build Docker image
           command: docker build -t $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest -t $CI_REGISTRY_USER/$FLYWAY_SERVICE:$CIRCLE_SHA1 ~/project/flyway-service/
@@ -131,6 +136,7 @@ jobs:
     executor: docker-publisher
     steps:
       - setup_remote_docker
+        docker_layer_caching: true
       - attach_workspace:
           at: /tmp/workspace
       - run:
