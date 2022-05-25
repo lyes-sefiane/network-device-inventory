@@ -1,2 +1,2 @@
 FROM flyway/flyway
-ADD flyway-service/sql_versions /flyway/sql
+ADD sql_versions /flyway/sql
