@@ -185,13 +185,7 @@ workflows:
           requires:
             - network-device-inventory-service-maven-build
           filters:
+            branches:
+              ignore: /.*/
             tags:
-              only:
-                - /^v.*/
-      - docker-publish:
-          requires:
-            - network-device-inventory-service-docker-build
-          filters:
-            tags:
-              only:
-                - /^v.*/
+              only: /^v.*/
