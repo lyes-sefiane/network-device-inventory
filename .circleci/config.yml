@@ -178,47 +178,20 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  network-device-inventory-workflow:
+  network-device-inventory-release-workflow:
     jobs:
-      - network-device-inventory-service-maven-build
+      - network-device-inventory-service-maven-build:
       - network-device-inventory-service-docker-build:
           requires:
             - network-device-inventory-service-maven-build
           filters:
             tags:
               only:
-                - 'v*.*.*'
-            branches:
-              only:
-                - master
-      - prometheus-service-docker-build:
-          filters:
-            branches:
-              only:
-                - master
-      - grafana-service-docker-build:
-          filters:
-            branches:
-              only:
-                - master
-      - nginx-service-docker-build:
-          filters:
-            branches:
-              only:
-                - master
-      - flyway-service-docker-build:
-          filters:
-            branches:
-              only:
-                - master
+                - /^v.*/
       - docker-publish:
           requires:
             - network-device-inventory-service-docker-build
-            - prometheus-service-docker-build
-            - grafana-service-docker-build
-            - nginx-service-docker-build
-            - flyway-service-docker-build
           filters:
-            branches:
+            tags:
               only:
-                - master
+                - /^v.*/
