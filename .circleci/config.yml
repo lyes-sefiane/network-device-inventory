@@ -180,12 +180,7 @@ jobs:
 workflows:
   network-device-inventory-release-workflow:
     jobs:
-      - network-device-inventory-service-maven-build
-      - network-device-inventory-service-docker-build:
-          requires:
-            - network-device-inventory-service-maven-build
+      - network-device-inventory-service-maven-build:
           filters:
-            branches:
-              ignore: /.*/
             tags:
               only: /^v.*/
