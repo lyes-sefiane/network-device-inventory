@@ -186,3 +186,47 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
+      - network-device-inventory-service-docker-build:
+          requires:
+            - network-device-inventory-service-maven-build
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - prometheus-service-docker-build:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - grafana-service-docker-build:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - nginx-service-docker-build:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - flyway-service-docker-build:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - docker-publish:
+          requires:
+            - network-device-inventory-service-docker-build
+            - prometheus-service-docker-build
+            - grafana-service-docker-build
+            - nginx-service-docker-build
+            - flyway-service-docker-build
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
