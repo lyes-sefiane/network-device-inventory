@@ -185,6 +185,9 @@ workflows:
           requires:
             - network-device-inventory-service-maven-build
           filters:
+            tags:
+              only:
+                - 'v*.*.*'
             branches:
               only:
                 - master
