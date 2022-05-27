@@ -178,6 +178,14 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
+  network-device-inventory-development-workflow:
+    jobs:
+      - network-device-inventory-service-maven-build:
+          filters:
+            branches:
+              only:
+                - develop
+                - master
   network-device-inventory-release-workflow:
     jobs:
       - network-device-inventory-service-maven-build:
