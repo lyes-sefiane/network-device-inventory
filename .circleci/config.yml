@@ -2,6 +2,9 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+orbs:
+  snyk: snyk/snyk@1.0.1
+
 parameters:
   GHA_Actor:
     type: string
@@ -33,6 +36,7 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
+      - snyk/scan
       - restore_cache:
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - run:
