@@ -162,7 +162,6 @@ jobs:
       - snyk/scan:
           severity-threshold: high
           docker-image-name: $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest
-          target-file: ~/project/flyway-service/Dockerfile
           fail-on-issues: true
       - run:
           name: Archive Docker image(s)
