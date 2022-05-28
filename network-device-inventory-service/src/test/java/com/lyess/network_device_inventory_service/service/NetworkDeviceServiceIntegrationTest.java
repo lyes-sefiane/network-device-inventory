@@ -7,6 +7,7 @@ import com.lyess.network_device_inventory_service.repository.INetworkDeviceRepos
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.HashSet;
 
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ActiveProfiles("test")
 public class NetworkDeviceServiceIntegrationTest {
 
     private final IService<NetworkDeviceDto> networkDeviceService;
