@@ -24,6 +24,8 @@ executors:
   docker-publisher:
     docker:
       - image: docker:latest
+        command: |
+          apt-get update; apt-get install curl
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
