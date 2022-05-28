@@ -1,2 +1,2 @@
-FROM nginx:1.21.6-alpine
+FROM nginx
 ADD conf.d /etc/nginx/conf.d
