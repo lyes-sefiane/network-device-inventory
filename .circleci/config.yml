@@ -37,12 +37,12 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
-      - snyk/scan
       - restore_cache:
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - run:
           name: mvn dependency go offline
           command: mvn dependency:go-offline
+      - snyk/scan
       - save_cache:
           paths:
             - ~/.m2
