@@ -78,7 +78,7 @@ jobs:
       - snyk/scan:
           severity-threshold: high
           docker-image-name: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
-          target-file: "Dockerfile"
+          target-file: ~/project/network-device-inventory-service/Dockerfile
           fail-on-issues: true
       - run:
           name: Archive Docker image
@@ -100,7 +100,7 @@ jobs:
       - snyk/scan:
           severity-threshold: high
           docker-image-name: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest
-          target-file: "Dockerfile"
+          target-file: ~/project/prometheus-service/Dockerfile
           fail-on-issues: true
       - run:
           name: Archive Docker image(s)
@@ -122,7 +122,7 @@ jobs:
       - snyk/scan:
           severity-threshold: high
           docker-image-name: $CI_REGISTRY_USER/$GRAFANA_SERVICE:latest
-          target-file: "Dockerfile"
+          target-file: ~/project/grafana-service/Dockerfile
           fail-on-issues: true
       - run:
           name: Archive Docker image(s)
@@ -144,7 +144,7 @@ jobs:
       - snyk/scan:
           severity-threshold: high
           docker-image-name: $CI_REGISTRY_USER/$NGINX_SERVICE:latest
-          target-file: "Dockerfile"
+          target-file: ~/project/nginx-service/Dockerfile
           fail-on-issues: true
       - run:
           name: Archive Docker image(s)
@@ -166,7 +166,7 @@ jobs:
       - snyk/scan:
           severity-threshold: high
           docker-image-name: $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest
-          target-file: "Dockerfile"
+          target-file: ~/project/flyway-service/Dockerfile
           fail-on-issues: true
       - run:
           name: Archive Docker image(s)
