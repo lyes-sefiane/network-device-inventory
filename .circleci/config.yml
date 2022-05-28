@@ -32,15 +32,11 @@ jobs:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
-      - image: maven:3-amazoncorretto-11
+      - image: amazoncorretto:11-alpine
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
-      - run:
-          name: Install Sudo
-          command: |
-            apt-get install -y sudo
       - snyk/scan
       - restore_cache:
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
