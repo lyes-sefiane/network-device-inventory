@@ -37,6 +37,11 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
+      - run:
+          name: Install Sudo
+          command: |
+            apt-get install -y sudo
+      - snyk/scan
       - restore_cache:
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - run:
@@ -73,11 +78,6 @@ jobs:
       - run:
           name: Build Docker image
           command: docker build -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1 ~/project/network-device-inventory-service/
-      - snyk/scan:
-          severity-threshold: high
-          docker-image-name: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
-          target-file: "Dockerfile"
-          fail-on-issues: true
       - run:
           name: Archive Docker image
           command: docker save --output network-device-inventory-service.tar $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1
