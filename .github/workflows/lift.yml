@@ -14,12 +14,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      # - name: Setup build environment
-      #   env:
-      #       nexus_token: ${{ secrets.MY_NEXUS_TOKEN }}
-      #   run: |
-      #       ... put shell script to create .m2/settings.xml
-      #       .... put shell script to install build dependencies if needed
       - name: Produce src artifact
         run: |
           if [[ -z "$GITHUB_BASE_REF" ]] ; then
