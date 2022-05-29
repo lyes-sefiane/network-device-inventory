@@ -46,9 +46,9 @@ COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/GithubScan.PNG)
 
-#### Securing Code, Dependencies and Containers CircleCI Pipelines
+#### Securing Code, Dependencies and Containers in CircleCI Pipelines
 
-Notes : 
+Note : 
 
 * Failed workflow(s) will not be displayed in Snyk (due to build/test failure or vulnerabilities discovery). 
 
