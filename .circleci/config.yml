@@ -23,7 +23,7 @@ parameters:
 executors:
   docker-publisher:
     docker:
-      - image: circleci/node:12
+      - image: cimg/node:latest
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -79,6 +79,7 @@ jobs:
           severity-threshold: high
           docker-image-name: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
           fail-on-issues: true
+
       - run:
           name: Archive Docker image
           command: docker save --output network-device-inventory-service.tar $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1
