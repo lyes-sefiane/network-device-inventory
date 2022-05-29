@@ -1,2 +1,2 @@
-FROM flyway/flyway
-ADD sql_versions /flyway/sql
+FROM flyway/flyway:latest-alpine
+ADD sql_versions /flyway/sqlf
