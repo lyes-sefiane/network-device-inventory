@@ -28,6 +28,15 @@ executors:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
+  snyk-vulnerabilities-scan:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - snyk/scan:
+          fail-on-issues: true
+          additional-arguments: '--all-projects'
   network-device-inventory-service-maven-build:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
@@ -42,8 +51,6 @@ jobs:
       - run:
           name: mvn dependency go offline
           command: mvn dependency:go-offline
-      - snyk/scan:
-          fail-on-issues: true
       - save_cache:
           paths:
             - ~/.m2
@@ -207,12 +214,8 @@ jobs:
 workflows:
   network-device-inventory-development-workflow:
     jobs:
-      - network-device-inventory-service-maven-build:
-          filters:
-            branches:
-              only:
-                - develop
-                - master
+      - snyk-vulnerabilities-scan
+      - network-device-inventory-service-maven-build
   network-device-inventory-release-workflow:
     jobs:
       - network-device-inventory-service-maven-build:
