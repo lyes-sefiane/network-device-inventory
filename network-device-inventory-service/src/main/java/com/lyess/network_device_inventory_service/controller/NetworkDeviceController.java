@@ -29,7 +29,6 @@ import java.util.List;
 @RequestMapping(value = "/v1/network-devices", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Network Device Controller")
 @PropertySource("${springdoc.api-docs.messages}")
-@CrossOrigin(origins = "http://localhost")
 public class NetworkDeviceController {
 
     private final IService<NetworkDeviceDto> networkDeviceService;
