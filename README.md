@@ -110,15 +110,20 @@ CircleCI received exit code 1
 https://github.com/lyes-s/network-device-inventory.git
 ```
 
+## Completed Features
+
+- [x] Build Docker Images In a [CircleCI](https://circleci.com/) Pipeline & Push them to [DockerHub](https://hub.docker.com/)
+- [x] Securing Code, Dependencies, Containers with [Snyk](https://snyk.io/)
+
 ## Next Features : Roadmap
 
-* Build Docker Images In a [CircleCI](https://circleci.com/) Pipeline & Push them to [DockerHub](https://hub.docker.com/)
-* Design and Develop a Graph Service with [GO](https://go.dev/)
-* Integrate & Implement [CQRS](https://www.confluent.io/blog/event-sourcing-cqrs-stream-processing-apache-kafka-whats-connection/) with [Kafka](https://kafka.apache.org/)
-* Integrate [Graph Visualization](https://github.com/lyes-s/graph-visualization)
-* Secure Network Device Inventory & Graph Services with [Keycloak](https://www.keycloak.org/)
-* Centralize Tracing with [ELK Stack](https://www.elastic.co/elastic-stack/)
-* Deploy to [Kubernetes](https://kubernetes.io/)
+- [ ] Enhance [CircleCI](https://circleci.com/) workflows with [SonarCloud](https://sonarcloud.io/) continuous Code Quality and Code Security analysis
+- [ ] Design and Develop a Graph Service with [GO](https://go.dev/)
+- [ ] Integrate & Implement [CQRS](https://www.confluent.io/blog/event-sourcing-cqrs-stream-processing-apache-kafka-whats-connection/) with [Kafka](https://kafka.apache.org/)
+- [ ] Integrate [Graph Visualization](https://github.com/lyes-s/graph-visualization)
+- [ ] Secure Network Device Inventory & Graph Services with [Keycloak](https://www.keycloak.org/)
+- [ ] Centralize Tracing with [ELK Stack](https://www.elastic.co/elastic-stack/)
+- [ ] Deploy to [Kubernetes](https://kubernetes.io/)
 
 ## Contributing
 
