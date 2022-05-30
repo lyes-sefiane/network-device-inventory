@@ -1,6 +1,7 @@
 # Network Device Inventory Microservices
 [![CircleCI](https://circleci.com/gh/lyes-s/network-device-inventory/tree/master.svg?style=shield)](https://circleci.com/gh/lyes-s/network-device-inventory/tree/master)
 ![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/lyes-s/network-device-inventory)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lyes-s_network-device-inventory&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=lyes-s_network-device-inventory)
 ![GitHub top language](https://img.shields.io/github/languages/top/lyes-s/network-device-inventory)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/lyes-s/network-device-inventory)
 ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/y/lyes-s/network-device-inventory/master)
@@ -23,7 +24,7 @@ COMPOSE_PROFILES=inventory docker-compose --env-file .env  up -d
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/inventory-restful-web-service.PNG)
 
-### Monitoring Documentation
+## Monitoring
 
 * [lyes-s/network-device-inventory/monitoring/](https://github.com/lyes-s/network-device-inventory/wiki/Monitoring)
 
@@ -33,20 +34,20 @@ COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/monitoring-system-design-v2.PNG)
 
-### CircleCI: Continuous Integration and Delivery Documentation
+## CircleCI: Continuous Integration and Delivery Documentation
 
 * [lyes-s/network-device-inventory/CircleCI-Continuous-Integration-and-Delivery/](https://github.com/lyes-s/network-device-inventory/wiki/CircleCI-Continuous-Integration-and-Delivery)
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/release-workflow.PNG)
 
 
-### Snyk: 'So Now You Know'
+## Snyk: 'So Now You Know'
 
-#### Securing Code, Dependencies in GitHub
+### Securing Code, Dependencies in GitHub
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/GithubScan.PNG)
 
-#### Securing Code, Dependencies and Containers in CircleCI Pipelines
+### Securing Code, Dependencies and Containers in CircleCI Pipelines
 
 Note : 
 
