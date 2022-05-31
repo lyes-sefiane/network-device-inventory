@@ -1,2 +1,2 @@
-FROM nginx:1.22.0
+FROM bitnami/nginx:1.22.0
 ADD conf.d /etc/nginx/conf.d
