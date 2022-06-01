@@ -5,6 +5,7 @@ version: 2.1
 # Partner Orb
 orbs:
   snyk: snyk/snyk@1.1.2
+  sonarcloud: sonarsource/sonarcloud@1.1.0
 
 parameters:
   GHA_Actor:
@@ -42,6 +43,7 @@ jobs:
       - run:
           name: mvn dependency go offline
           command: mvn dependency:go-offline
+      - sonarcloud/scan
       - snyk/scan:
           fail-on-issues: true
       - save_cache:
@@ -207,7 +209,8 @@ jobs:
 workflows:
   network-device-inventory-development-workflow:
     jobs:
-      - network-device-inventory-service-maven-build
+      - network-device-inventory-service-maven-build:
+          context: sonarcloud
       - network-device-inventory-service-docker-build:
           requires:
             - network-device-inventory-service-maven-build
