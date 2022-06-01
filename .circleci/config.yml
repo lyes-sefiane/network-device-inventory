@@ -245,12 +245,14 @@ workflows:
           requires:
             - inventory-service-maven-build
       - snyk-scan:
+          name: snyk-scan-inventory
           archive: network-device-inventory-service.tar
           image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
           requires:
             - inventory-service-docker-build
       - prometheus-service-docker-build
       - snyk-scan:
+          name: snyk-scan-prometheus
           archive: prometheus-service.tar
           image: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest
           requires:
