@@ -102,6 +102,7 @@ jobs:
           command: container test docker-archive:network-device-inventory-service.tar
           severity-threshold: high
           fail-on-issues: true
+          monitor-on-build: false
 
   prometheus-service-docker-build:
     executor: docker-publisher
