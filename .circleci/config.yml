@@ -74,6 +74,7 @@ jobs:
 
   inventory-service-docker-build:
     executor: docker-publisher
+    working_directory: ~/network-device-inventory/network-device-inventory-service
     steps:
       - checkout
       - setup_remote_docker:
