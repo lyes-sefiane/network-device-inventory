@@ -98,7 +98,8 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - snyk/scan-iac:
+      - snyk/scan:
+          command: snyk container test docker-archive:network-device-inventory-service.tar
           severity-threshold: high
           fail-on-issues: true
 
