@@ -98,11 +98,12 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - run:
+          command: docker load -i network-device-inventory-service.tar
       - snyk/scan:
-          command: container test docker-archive:network-device-inventory-service.tar
           severity-threshold: high
+          docker-image-name: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
           fail-on-issues: true
-          monitor-on-build: false
 
   prometheus-service-docker-build:
     executor: docker-publisher
