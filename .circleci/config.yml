@@ -228,19 +228,19 @@ workflows:
           prefix_key: network-device-inventory-service
           requires:
             - maven-build-inventory
-      - snyk-scan:
-          name: snyk-scan-inventory
-          archive: network-device-inventory-service.tar
-          image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
-          requires:
-            - docker-build-inventory
       - sonar-cloud:
           name: sonar-cloud-inventory
           command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION
           context:
             - SonarCloud
           requires:
-            - snyk-scan-inventory
+            - docker-build-inventory
+      - snyk-scan:
+          name: snyk-scan-inventory
+          archive: network-device-inventory-service.tar
+          image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
+          requires:
+            - sonar-cloud-inventory
       - docker-build:
           name: docker-build-prometheus
           working_directory: ~/network-device-inventory/prometheus-service
@@ -294,9 +294,9 @@ workflows:
           working_directory: ~/network-device-inventory
           command: COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
           requires:
-            - docker-build-inventory
-            - docker-build-prometheus
-            - docker-build-grafana
-            - docker-build-nginx
-            - docker-build-flyway
+            - snyk-scan-inventory
+            - snyk-scan-prometheus
+            - snyk-scan-grafana
+            - snyk-scan-nginx
+            - snyk-scan-flyway
 
