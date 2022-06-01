@@ -94,6 +94,11 @@ jobs:
             - ./network-device-inventory-service.tar
 
   inventory-service-snyk:
+    parameters:
+      archive:
+        type: string
+      image:
+        type: string
     executor: docker-publisher
     steps:
       - setup_remote_docker:
@@ -101,10 +106,10 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          command: docker load -i network-device-inventory-service.tar
+          command: docker load -i <<parameters.archive>>
       - snyk/scan:
           severity-threshold: high
-          docker-image-name: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
+          docker-image-name: <<parameters.image>>
           fail-on-issues: true
 
   prometheus-service-docker-build:
@@ -239,6 +244,8 @@ workflows:
           requires:
             - inventory-service-maven-build
       - inventory-service-snyk:
+          archive: network-device-inventory-service.tar
+          image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
           requires:
             - inventory-service-docker-build
   network-device-inventory-release-workflow:
