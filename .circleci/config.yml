@@ -111,6 +111,34 @@ jobs:
           paths:
             - ./<<parameters.prefix_key>>.tar
 
+  docker-build:
+    parameters:
+      working_directory:
+        type: string
+      checkout_path:
+        type: string
+      docker_image:
+        type: string
+      prefix_key:
+        type: string
+    executor: docker-publisher
+    working_directory: <<parameters.working_directory>>
+    steps:
+      - checkout:
+          path: <<parameters.checkout_path>>
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build Docker image
+          command: docker build -t <<parameters.docker_image>>:latest -t <<parameters.docker_image>>:$CIRCLE_SHA1 .
+      - run:
+          name: Archive Docker image
+          command: docker save --output <<parameters.prefix_key>>.tar <<parameters.docker_image>>:latest <<parameters.docker_image>>:$CIRCLE_SHA1
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./<<parameters.prefix_key>>.tar
+
   snyk-scan:
     parameters:
       archive:
@@ -281,3 +309,15 @@ workflows:
             - SonarCloud
           requires:
             - snyk-scan-inventory
+      - docker-build:
+          name: docker-build-prometheus
+          working_directory: ~/network-device-inventory/prometheus-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE
+          prefix_key: prometheus-service
+      - snyk-scan:
+          name: snyk-scan-prometheus
+          archive: prometheus-service.tar
+          image: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest
+          requires:
+            - docker-build-prometheus
