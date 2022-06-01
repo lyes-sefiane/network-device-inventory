@@ -100,7 +100,7 @@ jobs:
           at: .
       - snyk/scan:
           severity-threshold: high
-          docker-image-name: $NETWORK_DEVICE_INVENTORY_SERVICE.tar
+          docker-image-name: network-device-inventory-service.tar
           fail-on-issues: true
 
   prometheus-service-docker-build:
