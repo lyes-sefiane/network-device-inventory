@@ -53,6 +53,7 @@ jobs:
           command: mvn dependency:go-offline
       - snyk/scan:
           fail-on-issues: true
+          target-file: network-device-inventory-service/pom.xml
       - save_cache:
           paths:
             - ~/.m2
