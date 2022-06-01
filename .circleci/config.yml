@@ -29,6 +29,14 @@ executors:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
+  network-device-inventory-sonarcloud:
+    docker:
+      - image: cimg/openjdk:11.0.13
+    steps:
+      - checkout
+      - run:
+          name: Analyze on SonarCloud
+          command: mvn verify sonar:sonar -Dsonar.projectKey=lyes-s_network-device-inventory
   network-device-inventory-service-maven-build:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
@@ -43,7 +51,6 @@ jobs:
       - run:
           name: mvn dependency go offline
           command: mvn dependency:go-offline
-      - sonarcloud/scan
       - snyk/scan:
           fail-on-issues: true
       - save_cache:
@@ -209,8 +216,10 @@ jobs:
 workflows:
   network-device-inventory-development-workflow:
     jobs:
-      - network-device-inventory-service-maven-build:
-          context: sonarcloud
+      - network-device-inventory-sonarcloud:
+          context:
+            - SonarCloud
+      - network-device-inventory-service-maven-build
       - network-device-inventory-service-docker-build:
           requires:
             - network-device-inventory-service-maven-build
