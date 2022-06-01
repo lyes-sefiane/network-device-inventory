@@ -45,7 +45,8 @@ jobs:
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
-      - checkout
+      - checkout:
+          path: ~/network-device-inventory-service
       - restore_cache:
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - run:
@@ -53,7 +54,6 @@ jobs:
           command: mvn dependency:go-offline
       - snyk/scan:
           fail-on-issues: true
-          target-file: network-device-inventory-service/pom.xml
       - save_cache:
           paths:
             - ~/.m2
