@@ -29,7 +29,7 @@ executors:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  network-device-inventory-sonarcloud:
+  inventory-service-sonarcloud:
     docker:
       - image: cimg/openjdk:11.0.13
     steps:
@@ -37,7 +37,7 @@ jobs:
       - run:
           name: Analyze on SonarCloud
           command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION
-  network-device-inventory-service-maven-build:
+  inventory-service-maven-build:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
@@ -73,7 +73,7 @@ jobs:
           paths:
             - network-device-inventory-service-0.0.1-SNAPSHOT.jar
 
-  network-device-inventory-service-docker-build:
+  inventory-service-docker-build:
     executor: docker-publisher
     steps:
       - checkout
@@ -216,13 +216,15 @@ jobs:
 workflows:
   network-device-inventory-development-workflow:
     jobs:
-      - network-device-inventory-sonarcloud:
+      - inventory-service-sonarcloud:
           context:
             - SonarCloud
-      - network-device-inventory-service-maven-build
-      - network-device-inventory-service-docker-build:
+      - inventory-service-maven-build:
           requires:
-            - network-device-inventory-service-maven-build
+            - inventory-service-sonarcloud
+      - inventory-service-docker-build:
+          requires:
+            - inventory-service-maven-build
       - prometheus-service-docker-build
       - grafana-service-docker-build
       - nginx-service-docker-build
@@ -230,15 +232,23 @@ workflows:
 
   network-device-inventory-release-workflow:
     jobs:
-      - network-device-inventory-service-maven-build:
+      - inventory-service-sonarcloud:
+          context:
+            - SonarCloud
           filters:
             tags:
               only: /^v.*/
             branches:
               ignore: /.*/
-      - network-device-inventory-service-docker-build:
+      - inventory-service-maven-build:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - inventory-service-docker-build:
           requires:
-            - network-device-inventory-service-maven-build
+            - inventory-service-maven-build
           filters:
             tags:
               only: /^v.*/
@@ -270,7 +280,7 @@ workflows:
               ignore: /.*/
       - docker-publish:
           requires:
-            - network-device-inventory-service-docker-build
+            - inventory-service-docker-build
             - prometheus-service-docker-build
             - grafana-service-docker-build
             - nginx-service-docker-build
