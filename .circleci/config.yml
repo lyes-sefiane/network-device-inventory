@@ -93,12 +93,13 @@ jobs:
           paths:
             - ./network-device-inventory-service.tar
 
-  inventory-service-snyk:
+  snyk-scan:
     parameters:
       archive:
         type: string
       image:
         type: string
+    parallelism: 1
     executor: docker-publisher
     steps:
       - setup_remote_docker:
@@ -243,11 +244,17 @@ workflows:
       - inventory-service-docker-build:
           requires:
             - inventory-service-maven-build
-      - inventory-service-snyk:
+      - snyk-scan:
           archive: network-device-inventory-service.tar
           image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
           requires:
             - inventory-service-docker-build
+      - prometheus-service-docker-build
+      - snyk-scan:
+          archive: prometheus-service.tar
+          image: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest
+          requires:
+            - prometheus-service-docker-build
   network-device-inventory-release-workflow:
     jobs:
       - inventory-service-sonarcloud:
