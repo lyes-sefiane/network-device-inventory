@@ -98,9 +98,8 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - snyk/scan:
+      - snyk/scan-iac:
           severity-threshold: high
-          docker-image-name: network-device-inventory-service.tar
           fail-on-issues: true
 
   prometheus-service-docker-build:
