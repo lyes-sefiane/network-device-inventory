@@ -335,7 +335,7 @@ workflows:
             - docker-build-grafana
       - docker-build:
           name: docker-build-nginx
-          working_directory: ~/network-device-inventory/NGINX-service
+          working_directory: ~/network-device-inventory/nginx-service
           checkout_path: ~/network-device-inventory
           docker_image: $CI_REGISTRY_USER/$NGINX_SERVICE
           prefix_key: nginx-service
