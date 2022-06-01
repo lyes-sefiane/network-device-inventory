@@ -289,7 +289,7 @@ workflows:
           requires:
             - docker-build-flyway
       - docker-compose:
-          name: docker-compose-up-test
+          name: docker-compose-up
           working_directory: ~/network-device-inventory
           command: COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
           requires:
