@@ -84,7 +84,7 @@ jobs:
           at: ~/network-device-inventory/network-device-inventory-service/target
       - run:
           name: Build Docker image
-          command: docker build $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE .
+          command: docker build -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE .
       - persist_to_workspace:
           root: .
           paths:
