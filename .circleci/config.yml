@@ -82,7 +82,7 @@ jobs:
           at: ~/network-device-inventory/network-device-inventory-service/target
       - run:
           name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1 ~/network-device-inventory/network-device-inventory-service/
+          command: docker build -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1 ~/network-device-inventory/network-device-inventory-service
       - snyk/scan:
           severity-threshold: high
           docker-image-name: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
