@@ -163,6 +163,8 @@ jobs:
     parameters:
       working_directory:
         type: string
+      command:
+        type: string
     working_directory: <<parameters.working_directory>>
     steps:
       - checkout
@@ -178,7 +180,7 @@ jobs:
             done
       - run:
           name : Docker Compose UP
-          command: COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
+          command: <<command>>
 
   docker-publish:
     executor: docker-publisher
@@ -289,6 +291,8 @@ workflows:
             - docker-build-flyway
       - docker-compose:
           name: docker-compose up
+          working_directory: ~/network-device-inventory
+          command: COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
           requires:
             - docker-build-inventory
             - docker-build-prometheus
