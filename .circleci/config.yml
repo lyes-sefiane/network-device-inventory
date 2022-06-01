@@ -44,9 +44,10 @@ jobs:
       - image: cimg/openjdk:11.0.13
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    working_directory: ~/network-device-inventory/network-device-inventory-service
     steps:
       - checkout:
-          path: ~/network-device-inventory-service
+          path: ~/network-device-inventory
       - restore_cache:
           key: network-device-inventory-service-{{ checksum "pom.xml" }}
       - run:
@@ -217,19 +218,7 @@ jobs:
 workflows:
   network-device-inventory-development-workflow:
     jobs:
-      - inventory-service-sonarcloud:
-          context:
-            - SonarCloud
-      - inventory-service-maven-build:
-          requires:
-            - inventory-service-sonarcloud
-      - inventory-service-docker-build:
-          requires:
-            - inventory-service-maven-build
-      - prometheus-service-docker-build
-      - grafana-service-docker-build
-      - nginx-service-docker-build
-      - flyway-service-docker-build
+      - inventory-service-maven-build
 
   network-device-inventory-release-workflow:
     jobs:
