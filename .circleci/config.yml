@@ -158,97 +158,27 @@ jobs:
           docker-image-name: <<parameters.image>>
           fail-on-issues: true
 
-  prometheus-service-docker-build:
+  docker-compose:
     executor: docker-publisher
-    working_directory: ~/network-device-inventory/prometheus-service
+    parameters:
+      working_directory:
+        type: string
+    working_directory: <<parameters.working_directory>>
     steps:
-      - checkout:
-          path: ~/network-device-inventory
+      - checkout
       - setup_remote_docker:
           docker_layer_caching: true
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
-          name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest -t $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:$CIRCLE_SHA1 .
-      - snyk/scan:
-          severity-threshold: high
-          docker-image-name: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest
-          fail-on-issues: true
+          name: Load Docker image(s)
+          command: |
+            for f in /tmp/workspace/*.tar; do
+              cat $f | docker load
+            done
       - run:
-          name: Archive Docker image(s)
-          command: docker save --output prometheus-service.tar $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:$CIRCLE_SHA1
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./prometheus-service.tar
-
-  grafana-service-docker-build:
-    executor: docker-publisher
-    working_directory: ~/network-device-inventory/grafana-service
-    steps:
-      - checkout:
-          path: ~/network-device-inventory
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$GRAFANA_SERVICE:latest -t $CI_REGISTRY_USER/$GRAFANA_SERVICE:$CIRCLE_SHA1 .
-      - snyk/scan:
-          severity-threshold: high
-          docker-image-name: $CI_REGISTRY_USER/$GRAFANA_SERVICE:latest
-          fail-on-issues: true
-      - run:
-          name: Archive Docker image(s)
-          command: docker save --output grafana-service.tar $CI_REGISTRY_USER/$GRAFANA_SERVICE:latest $CI_REGISTRY_USER/$GRAFANA_SERVICE:$CIRCLE_SHA1
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./grafana-service.tar
-
-  nginx-service-docker-build:
-    executor: docker-publisher
-    working_directory: ~/network-device-inventory/nginx-service
-    steps:
-      - checkout:
-          path: ~/network-device-inventory
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$NGINX_SERVICE:latest -t $CI_REGISTRY_USER/$NGINX_SERVICE:$CIRCLE_SHA1 .
-      - snyk/scan:
-          severity-threshold: high
-          docker-image-name: $CI_REGISTRY_USER/$NGINX_SERVICE:latest
-          fail-on-issues: true
-      - run:
-          name: Archive Docker image(s)
-          command: docker save --output nginx-service.tar $CI_REGISTRY_USER/$NGINX_SERVICE:latest $CI_REGISTRY_USER/$NGINX_SERVICE:$CIRCLE_SHA1
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./nginx-service.tar
-
-  flyway-service-docker-build:
-    executor: docker-publisher
-    working_directory: ~/network-device-inventory/flyway-service
-    steps:
-      - checkout:
-          path: ~/network-device-inventory
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest -t $CI_REGISTRY_USER/$FLYWAY_SERVICE:$CIRCLE_SHA1 .
-      - snyk/scan:
-          severity-threshold: high
-          docker-image-name: $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest
-          fail-on-issues: true
-      - run:
-          name: Archive Docker image(s)
-          command: docker save --output flyway-service.tar $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest $CI_REGISTRY_USER/$FLYWAY_SERVICE:$CIRCLE_SHA1
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./flyway-service.tar
+          name : Docker Compose UP
+          command: COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
 
   docker-publish:
     executor: docker-publisher
@@ -357,3 +287,12 @@ workflows:
           image: $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest
           requires:
             - docker-build-flyway
+      - docker-compose:
+          name: docker-compose up
+          requires:
+            - docker-build-inventory
+            - docker-build-prometheus
+            - docker-build-grafana
+            - docker-build-nginx
+            - docker-build-flyway
+
