@@ -26,8 +26,7 @@ executors:
     docker:
       - image: cimg/node:18.2.0
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+
 jobs:
   sonar-cloud:
     parameters:
@@ -82,26 +81,35 @@ jobs:
           paths:
             - <<parameters.prefix_key>>-0.0.1-SNAPSHOT.jar
 
-  inventory-service-docker-build:
+  maven-docker-build:
+    parameters:
+      working_directory:
+        type: string
+      checkout_path:
+        type: string
+      docker_image:
+        type: string
+      prefix_key:
+        type: string
     executor: docker-publisher
-    working_directory: ~/network-device-inventory/network-device-inventory-service
+    working_directory: <<parameters.working_directory>>
     steps:
       - checkout:
-          path: ~/network-device-inventory
+          path: <<parameters.checkout_path>>
       - setup_remote_docker:
           docker_layer_caching: true
       - attach_workspace:
-          at: ~/network-device-inventory/network-device-inventory-service/target
+          at: <<parameters.working_directory>>/target
       - run:
           name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1 .
+          command: docker build -t <<parameters.docker_image>>:latest -t <<parameters.docker_image>>:$CIRCLE_SHA1 .
       - run:
           name: Archive Docker image
-          command: docker save --output network-device-inventory-service.tar $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1
+          command: docker save --output <<parameters.prefix_key>>.tar <<parameters.docker_image>>:latest <<parameters.docker_image>>:$CIRCLE_SHA1
       - persist_to_workspace:
           root: .
           paths:
-            - ./network-device-inventory-service.tar
+            - ./<<parameters.prefix_key>>.tar
 
   snyk-scan:
     parameters:
@@ -244,8 +252,6 @@ jobs:
             
 
 
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   network-device-inventory-development-workflow:
     jobs:
@@ -254,7 +260,12 @@ workflows:
           working_directory: ~/network-device-inventory/network-device-inventory-service
           checkout_path: ~/network-device-inventory
           prefix_key: network-device-inventory-service
-      - inventory-service-docker-build:
+      - maven-docker-build:
+          name: docker-build-inventory
+          working_directory: ~/network-device-inventory/network-device-inventory-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE
+          prefix_key: network-device-inventory-service
           requires:
             - maven-build-inventory
       - snyk-scan:
@@ -262,7 +273,7 @@ workflows:
           archive: network-device-inventory-service.tar
           image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
           requires:
-            - inventory-service-docker-build
+            - docker-build-inventory
       - sonar-cloud:
           name: sonar-cloud-inventory
           command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION
