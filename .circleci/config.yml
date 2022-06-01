@@ -99,13 +99,15 @@ jobs:
 
   prometheus-service-docker-build:
     executor: docker-publisher
+    working_directory: ~/network-device-inventory/prometheus-service
     steps:
-      - checkout
+      - checkout:
+          path: ~/network-device-inventory
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
           name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest -t $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:$CIRCLE_SHA1 ~/project/prometheus-service/
+          command: docker build -t $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest -t $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:$CIRCLE_SHA1 .
       - snyk/scan:
           severity-threshold: high
           docker-image-name: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest
@@ -220,6 +222,7 @@ workflows:
       - inventory-service-docker-build:
           requires:
             - inventory-service-maven-build
+      - prometheus-service-docker-build
   network-device-inventory-release-workflow:
     jobs:
       - inventory-service-sonarcloud:
