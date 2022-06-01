@@ -53,8 +53,6 @@ jobs:
       - run:
           name: mvn dependency go offline
           command: mvn dependency:go-offline
-      - snyk/scan:
-          fail-on-issues: true
       - save_cache:
           paths:
             - ~/.m2
