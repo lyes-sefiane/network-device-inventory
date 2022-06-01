@@ -36,7 +36,7 @@ jobs:
       - checkout
       - run:
           name: Analyze on SonarCloud
-          command: mvn verify sonar:sonar -Dsonar.projectKey=lyes-s_network-device-inventory -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=lyes-s
+          command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION
   network-device-inventory-service-maven-build:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
