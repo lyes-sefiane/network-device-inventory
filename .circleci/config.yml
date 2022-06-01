@@ -97,6 +97,16 @@ jobs:
           paths:
             - ./network-device-inventory-service.tar
 
+  inventory-service-docker-snyk:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: .
+      - snyk/scan:
+          severity-threshold: high
+          docker-image-name: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
+          fail-on-issues: true
+
   prometheus-service-docker-build:
     executor: docker-publisher
     working_directory: ~/network-device-inventory/prometheus-service
@@ -224,19 +234,13 @@ jobs:
 workflows:
   network-device-inventory-development-workflow:
     jobs:
-      - inventory-service-sonarcloud:
-          context:
-            - SonarCloud
-      - inventory-service-maven-build:
-          requires:
-            - inventory-service-sonarcloud
+      - inventory-service-maven-build
       - inventory-service-docker-build:
           requires:
             - inventory-service-maven-build
-      - prometheus-service-docker-build
-      - grafana-service-docker-build
-      - nginx-service-docker-build
-      - flyway-service-docker-build
+      - inventory-service-snyk:
+          requires:
+            - inventory-service-docker-build
   network-device-inventory-release-workflow:
     jobs:
       - inventory-service-sonarcloud:
@@ -248,6 +252,8 @@ workflows:
             branches:
               ignore: /.*/
       - inventory-service-maven-build:
+          requires:
+            - inventory-service-sonarcloud
           filters:
             tags:
               only: /^v.*/
