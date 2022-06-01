@@ -61,13 +61,13 @@ jobs:
           name: mvn clean install
           command: mvn clean install
       - store_test_results:
-          path: ~/target/surefire-reports
+          path: ~/network-device-inventory/network-device-inventory-service/target/surefire-reports
       - store_artifacts:
-          path: ~/target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
+          path: ~/network-device-inventory/network-device-inventory-service/target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
           # taken to be the root directory of the workspace.
-          root: ~/target
+          root: ~/network-device-inventory/network-device-inventory-service/target
           # Must be relative path from root
           paths:
             - network-device-inventory-service-0.0.1-SNAPSHOT.jar
