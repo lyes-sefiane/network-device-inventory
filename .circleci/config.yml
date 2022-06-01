@@ -60,7 +60,6 @@ jobs:
       - run:
           name: mvn clean install
           command: mvn clean install
-          working_directory: ~/project/network-device-inventory-service
       - store_test_results:
           path: ~/project/network-device-inventory-service/target/surefire-reports
       - store_artifacts:
