@@ -97,7 +97,7 @@ jobs:
           paths:
             - ./network-device-inventory-service.tar
 
-  inventory-service-docker-snyk:
+  inventory-service-snyk:
     executor: docker-publisher
     steps:
       - attach_workspace:
