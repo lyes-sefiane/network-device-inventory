@@ -79,7 +79,7 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - attach_workspace:
-          at: ~/project/network-device-inventory-service/target
+          at: ~/network-device-inventory/network-device-inventory-service/target
       - run:
           name: Build Docker image
           command: docker build -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1 ~/project/network-device-inventory-service/
@@ -216,7 +216,9 @@ workflows:
   network-device-inventory-development-workflow:
     jobs:
       - inventory-service-maven-build
-
+      - inventory-service-docker-build:
+          requires:
+            - inventory-service-maven-build
   network-device-inventory-release-workflow:
     jobs:
       - inventory-service-sonarcloud:
