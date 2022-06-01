@@ -122,13 +122,15 @@ jobs:
 
   grafana-service-docker-build:
     executor: docker-publisher
+    working_directory: ~/network-device-inventory/grafana-service
     steps:
-      - checkout
+      - checkout:
+          path: ~/network-device-inventory
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
           name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$GRAFANA_SERVICE:latest -t $CI_REGISTRY_USER/$GRAFANA_SERVICE:$CIRCLE_SHA1 ~/project/grafana-service/
+          command: docker build -t $CI_REGISTRY_USER/$GRAFANA_SERVICE:latest -t $CI_REGISTRY_USER/$GRAFANA_SERVICE:$CIRCLE_SHA1 .
       - snyk/scan:
           severity-threshold: high
           docker-image-name: $CI_REGISTRY_USER/$GRAFANA_SERVICE:latest
@@ -143,13 +145,15 @@ jobs:
 
   nginx-service-docker-build:
     executor: docker-publisher
+    working_directory: ~/network-device-inventory/nginx-service
     steps:
-      - checkout
+      - checkout:
+          path: ~/network-device-inventory
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
           name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$NGINX_SERVICE:latest -t $CI_REGISTRY_USER/$NGINX_SERVICE:$CIRCLE_SHA1 ~/project/nginx-service/
+          command: docker build -t $CI_REGISTRY_USER/$NGINX_SERVICE:latest -t $CI_REGISTRY_USER/$NGINX_SERVICE:$CIRCLE_SHA1 .
       - snyk/scan:
           severity-threshold: high
           docker-image-name: $CI_REGISTRY_USER/$NGINX_SERVICE:latest
@@ -164,13 +168,15 @@ jobs:
 
   flyway-service-docker-build:
     executor: docker-publisher
+    working_directory: ~/network-device-inventory/flyway-service
     steps:
-      - checkout
+      - checkout:
+          path: ~/network-device-inventory
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
           name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest -t $CI_REGISTRY_USER/$FLYWAY_SERVICE:$CIRCLE_SHA1 ~/project/flyway-service/
+          command: docker build -t $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest -t $CI_REGISTRY_USER/$FLYWAY_SERVICE:$CIRCLE_SHA1 .
       - snyk/scan:
           severity-threshold: high
           docker-image-name: $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest
@@ -218,11 +224,19 @@ jobs:
 workflows:
   network-device-inventory-development-workflow:
     jobs:
-      - inventory-service-maven-build
+      - inventory-service-sonarcloud:
+          context:
+            - SonarCloud
+      - inventory-service-maven-build:
+          requires:
+            - inventory-service-sonarcloud
       - inventory-service-docker-build:
           requires:
             - inventory-service-maven-build
       - prometheus-service-docker-build
+      - grafana-service-docker-build
+      - nginx-service-docker-build
+      - flyway-service-docker-build
   network-device-inventory-release-workflow:
     jobs:
       - inventory-service-sonarcloud:
