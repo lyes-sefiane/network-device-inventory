@@ -29,48 +29,58 @@ executors:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  inventory-service-sonarcloud:
+  sonar-cloud:
+    parameters:
+      image:
+        type: string
+        default: cimg/openjdk:11.0.13
+      command:
+        type: string
     docker:
-      - image: cimg/openjdk:11.0.13
+      - image: <<parameters.image>>
     steps:
       - checkout
       - run:
           name: Analyze on SonarCloud
-          command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION
-  inventory-service-maven-build:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+          command: <<parameters.command>>
+
+  maven-build:
+    parameters:
+      image:
+        type: string
+        default: cimg/openjdk:11.0.13
+      working_directory:
+        type: string
+      checkout_path:
+        type: string
+      prefix_key:
+        type: string
     docker:
-      - image: cimg/openjdk:11.0.13
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
-    working_directory: ~/network-device-inventory/network-device-inventory-service
+      - image: <<parameters.image>>
+    working_directory: <<parameters.working_directory>>
     steps:
       - checkout:
-          path: ~/network-device-inventory
+          path: <<parameters.checkout_path>>
       - restore_cache:
-          key: network-device-inventory-service-{{ checksum "pom.xml" }}
+          key: <<parameters.prefix_key>>-{{ checksum "pom.xml" }}
       - run:
           name: mvn dependency go offline
           command: mvn dependency:go-offline
       - save_cache:
           paths:
             - ~/.m2
-          key: network-device-inventory-service-{{ checksum "pom.xml" }}
+          key: <<parameters.prefix_key>>-{{ checksum "pom.xml" }}
       - run:
           name: mvn clean install
           command: mvn clean install
       - store_test_results:
-          path: ~/network-device-inventory/network-device-inventory-service/target/surefire-reports
+          path: <<parameters.working_directory>>/target/surefire-reports
       - store_artifacts:
-          path: ~/network-device-inventory/network-device-inventory-service/target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
+          path: <<parameters.working_directory>>/target/<<parameters.prefix_key>>-0.0.1-SNAPSHOT.jar
       - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
-          root: ~/network-device-inventory/network-device-inventory-service/target
-          # Must be relative path from root
+          root: <<parameters.working_directory>>/target
           paths:
-            - network-device-inventory-service-0.0.1-SNAPSHOT.jar
+            - <<parameters.prefix_key>>-0.0.1-SNAPSHOT.jar
 
   inventory-service-docker-build:
     executor: docker-publisher
@@ -99,7 +109,6 @@ jobs:
         type: string
       image:
         type: string
-    parallelism: 1
     executor: docker-publisher
     steps:
       - setup_remote_docker:
@@ -240,23 +249,27 @@ jobs:
 workflows:
   network-device-inventory-development-workflow:
     jobs:
-      - inventory-service-maven-build
+      - maven-build:
+          name: maven-build-inventory
+          working_directory: ~/network-device-inventory/network-device-inventory-service
+          checkout_path: ~/network-device-inventory
+          prefix_key: network-device-inventory-service
       - inventory-service-docker-build:
           requires:
-            - inventory-service-maven-build
+            - maven-build-inventory
       - snyk-scan:
           name: snyk-scan-inventory
           archive: network-device-inventory-service.tar
           image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
           requires:
             - inventory-service-docker-build
-      - prometheus-service-docker-build
-      - snyk-scan:
-          name: snyk-scan-prometheus
-          archive: prometheus-service.tar
-          image: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest
+      - sonar-cloud:
+          name: sonar-cloud-inventory
+          command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION
+          context:
+            - SonarCloud
           requires:
-            - prometheus-service-docker-build
+            - snyk-scan-inventory
   network-device-inventory-release-workflow:
     jobs:
       - inventory-service-sonarcloud:
