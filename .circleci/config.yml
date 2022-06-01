@@ -180,7 +180,7 @@ jobs:
             done
       - run:
           name : Docker Compose UP
-          command: <<command>>
+          command: <<parameters.command>>
 
   docker-publish:
     executor: docker-publisher
