@@ -450,11 +450,3 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
-      - docker-publish:
-          name: docker-push
-          requires:
-            - docker-compose-up
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
