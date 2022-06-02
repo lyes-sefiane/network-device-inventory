@@ -4,6 +4,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lyes-s_network-device-inventory&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=lyes-s_network-device-inventory)
 ![GitHub top language](https://img.shields.io/github/languages/top/lyes-s/network-device-inventory)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/lyes-s/network-device-inventory)
+![GitHub Release Date](https://img.shields.io/github/release-date/lyes-s/network-device-inventory)
 ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/y/lyes-s/network-device-inventory/master)
 ![GitHub Repo stars](https://img.shields.io/github/stars/lyes-s/network-device-inventory?style=social)
 [![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/lyes-s/network-device-inventory/blob/master/LICENSE.md)
@@ -24,7 +25,7 @@ COMPOSE_PROFILES=inventory docker-compose --env-file .env  up -d
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/inventory-restful-web-service.PNG)
 
-## Monitoring
+## Monitoring Documentation
 
 * [lyes-s/network-device-inventory/monitoring/](https://github.com/lyes-s/network-device-inventory/wiki/Monitoring)
 
@@ -35,14 +36,14 @@ COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/monitoring-system-design-v2.PNG)
 
 
-## Snyk: 'So Now You Know'
+## Snyk: 'So Now You Know' Documentation
 
 * [lyes-s/network-device-inventory/Snyk-Securing-Code-Dependencies-Containers-and-Infrastructure-as-Code/](https://github.com/lyes-s/network-device-inventory/wiki/Snyk-Securing-Code,-Dependencies,-Containers-and-Infrastructure-as-Code)
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/CircleCiBuild.PNG)
 
 
-## SonarCloud: Code Quality and Code Security
+## SonarCloud: Code Quality and Code Security Documentation
 
 * [lyes-s/network-device-inventory/SonarCloud-Code-Quality-and-Code-Security/](https://github.com/lyes-s/network-device-inventory/wiki/SonarCloud-Code-Quality-and-Code-Security)
 
@@ -78,6 +79,7 @@ https://github.com/lyes-s/network-device-inventory.git
 ## Next Features : Roadmap
 
 - [ ] Design and Develop a Graph Service with [GO](https://go.dev/)
+- [ ] [JaCoCo](https://www.eclemma.org/jacoco/) Report Generation & Integration with [SonarCloud](https://sonarcloud.io/) 
 - [ ] Integrate & Implement [CQRS](https://www.confluent.io/blog/event-sourcing-cqrs-stream-processing-apache-kafka-whats-connection/) with [Kafka](https://kafka.apache.org/)
 - [ ] Integrate [Graph Visualization](https://github.com/lyes-s/graph-visualization)
 - [ ] Secure Network Device Inventory & Graph Services with [Keycloak](https://www.keycloak.org/)
