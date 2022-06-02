@@ -34,64 +34,10 @@ COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/monitoring-system-design-v2.PNG)
 
-## CircleCI: Continuous Integration and Delivery Documentation
-
-* [lyes-s/network-device-inventory/CircleCI-Continuous-Integration-and-Delivery/](https://github.com/lyes-s/network-device-inventory/wiki/CircleCI-Continuous-Integration-and-Delivery)
-
-![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/release-workflow-v5.PNG)
-
 
 ## Snyk: 'So Now You Know'
 
-### Securing Code, Dependencies in GitHub
-
-![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/GithubScan.PNG)
-
-### Securing Code, Dependencies and Containers in CircleCI Pipelines
-
-Note : 
-
-* Failed workflow(s) will not be displayed in Snyk (due to build/test failure or vulnerabilities discovery). 
-
-In the screenshot below Snyk found 2 issues (02 active critical vulnerabilities for NGINX). The CI fail.  
-
-```
-Run Snyk
-
-Testing ********/*************:latest...
-
-✗ Critical severity vulnerability found in pcre2/libpcre2-8-0
-  Description: Out-of-bounds Read
-  Info: https://snyk.io/vuln/SNYK-DEBIAN11-PCRE2-2808697
-  Introduced through: meta-common-packages@meta
-  From: meta-common-packages@meta > pcre2/libpcre2-8-0@10.36-2
-
-✗ Critical severity vulnerability found in pcre2/libpcre2-8-0
-  Description: Out-of-bounds Read
-  Info: https://snyk.io/vuln/SNYK-DEBIAN11-PCRE2-2808704
-  Introduced through: meta-common-packages@meta
-  From: meta-common-packages@meta > pcre2/libpcre2-8-0@10.36-2
-
-
-
-Organization:      lyes-s
-Package manager:   deb
-Project name:      docker-image|********/*************
-Docker image:      ********/*************:latest
-Platform:          linux/amd64
-Base image:        nginx:1.22.0
-Licenses:          enabled
-
-Tested 143 dependencies for known issues, found 2 issues.
-
-According to our scan, you are currently using the most secure version of the selected base image
-
-
-
-Exited with code exit status 1
-
-CircleCI received exit code 1
-```
+* [lyes-s/network-device-inventory/Snyk-Securing-Code-Dependencies-Containers-and-Infrastructure-as-Code/](https://github.com/lyes-s/network-device-inventory/wiki/Snyk-Securing-Code,-Dependencies,-Containers-and-Infrastructure-as-Code)
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/CircleCiBuild.PNG)
 
@@ -102,6 +48,12 @@ CircleCI received exit code 1
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/sonarcloud-v2.PNG)
 
+
+## CircleCI: Continuous Integration and Delivery Documentation
+
+* [lyes-s/network-device-inventory/CircleCI-Continuous-Integration-and-Delivery/](https://github.com/lyes-s/network-device-inventory/wiki/CircleCI-Continuous-Integration-and-Delivery)
+
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/release-workflow-v5.PNG)
 
 ## Requirements
 ```
