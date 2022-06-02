@@ -454,6 +454,7 @@ workflows:
           name: docker-push
           requires:
             - docker-compose-up
+          filters:
             tags:
               only: /^v.*/
             branches:
