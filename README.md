@@ -38,7 +38,7 @@ COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
 
 * [lyes-s/network-device-inventory/CircleCI-Continuous-Integration-and-Delivery/](https://github.com/lyes-s/network-device-inventory/wiki/CircleCI-Continuous-Integration-and-Delivery)
 
-![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/release-workflow.PNG)
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/release-workflow-v3.PNG)
 
 
 ## Snyk: 'So Now You Know'
@@ -96,6 +96,13 @@ CircleCI received exit code 1
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/CircleCiBuild.PNG)
 
 
+## SonarCloud: Code Quality and Code Security
+
+* [lyes-s/network-device-inventory/SonarCloud-Code-Quality-and-Code-Security/](https://github.com/lyes-s/network-device-inventory/wiki/SonarCloud-Code-Quality-and-Code-Security)
+
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/sonarcloud.PNG)
+
+
 ## Requirements
 ```
 1. Java 11.x.y
@@ -114,10 +121,10 @@ https://github.com/lyes-s/network-device-inventory.git
 
 - [x] Build Docker Images In a [CircleCI](https://circleci.com/) Pipeline & Push them to [DockerHub](https://hub.docker.com/)
 - [x] Securing Code, Dependencies, Containers with [Snyk](https://snyk.io/)
+- [x] Enhance [CircleCI](https://circleci.com/) workflows with [SonarCloud](https://sonarcloud.io/) continuous Code Quality and Code Security analysis
 
 ## Next Features : Roadmap
 
-- [ ] Enhance [CircleCI](https://circleci.com/) workflows with [SonarCloud](https://sonarcloud.io/) continuous Code Quality and Code Security analysis
 - [ ] Design and Develop a Graph Service with [GO](https://go.dev/)
 - [ ] Integrate & Implement [CQRS](https://www.confluent.io/blog/event-sourcing-cqrs-stream-processing-apache-kafka-whats-connection/) with [Kafka](https://kafka.apache.org/)
 - [ ] Integrate [Graph Visualization](https://github.com/lyes-s/graph-visualization)
