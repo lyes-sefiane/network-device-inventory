@@ -5,6 +5,7 @@ version: 2.1
 # Partner Orb
 orbs:
   snyk: snyk/snyk@1.1.2
+  sonarcloud: sonarsource/sonarcloud@1.1.0
 
 parameters:
   GHA_Actor:
@@ -25,152 +26,160 @@ executors:
     docker:
       - image: cimg/node:18.2.0
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  network-device-inventory-service-maven-build:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  sonar-cloud:
+    parameters:
+      image:
+        type: string
+        default: cimg/openjdk:11.0.13
+      command:
+        type: string
     docker:
-      - image: cimg/openjdk:11.0.13
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: <<parameters.image>>
     steps:
       - checkout
+      - run:
+          name: Analyze on SonarCloud
+          command: <<parameters.command>>
+
+  maven-build:
+    parameters:
+      image:
+        type: string
+        default: cimg/openjdk:11.0.13
+      working_directory:
+        type: string
+      checkout_path:
+        type: string
+      prefix_key:
+        type: string
+    docker:
+      - image: <<parameters.image>>
+    working_directory: <<parameters.working_directory>>
+    steps:
+      - checkout:
+          path: <<parameters.checkout_path>>
       - restore_cache:
-          key: network-device-inventory-service-{{ checksum "pom.xml" }}
+          key: <<parameters.prefix_key>>-{{ checksum "pom.xml" }}
       - run:
           name: mvn dependency go offline
           command: mvn dependency:go-offline
-      - snyk/scan:
-          fail-on-issues: true
       - save_cache:
           paths:
             - ~/.m2
-          key: network-device-inventory-service-{{ checksum "pom.xml" }}
+          key: <<parameters.prefix_key>>-{{ checksum "pom.xml" }}
       - run:
           name: mvn clean install
           command: mvn clean install
-          working_directory: ~/project/network-device-inventory-service
       - store_test_results:
-          path: ~/project/network-device-inventory-service/target/surefire-reports
+          path: <<parameters.working_directory>>/target/surefire-reports
       - store_artifacts:
-          path: ~/project/network-device-inventory-service/target/network-device-inventory-service-0.0.1-SNAPSHOT.jar
+          path: <<parameters.working_directory>>/target/<<parameters.prefix_key>>-0.0.1-SNAPSHOT.jar
       - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
-          root: ~/project/network-device-inventory-service/target
-          # Must be relative path from root
+          root: <<parameters.working_directory>>/target
           paths:
-            - network-device-inventory-service-0.0.1-SNAPSHOT.jar
+            - <<parameters.prefix_key>>-0.0.1-SNAPSHOT.jar
 
-  network-device-inventory-service-docker-build:
+  maven-docker-build:
+    parameters:
+      working_directory:
+        type: string
+      checkout_path:
+        type: string
+      docker_image:
+        type: string
+      prefix_key:
+        type: string
     executor: docker-publisher
+    working_directory: <<parameters.working_directory>>
+    steps:
+      - checkout:
+          path: <<parameters.checkout_path>>
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - attach_workspace:
+          at: <<parameters.working_directory>>/target
+      - run:
+          name: Build Docker image
+          command: docker build -t <<parameters.docker_image>>:latest -t <<parameters.docker_image>>:$CIRCLE_SHA1 .
+      - run:
+          name: Archive Docker image
+          command: docker save --output <<parameters.prefix_key>>.tar <<parameters.docker_image>>:latest <<parameters.docker_image>>:$CIRCLE_SHA1
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./<<parameters.prefix_key>>.tar
+
+  docker-build:
+    parameters:
+      working_directory:
+        type: string
+      checkout_path:
+        type: string
+      docker_image:
+        type: string
+      prefix_key:
+        type: string
+    executor: docker-publisher
+    working_directory: <<parameters.working_directory>>
+    steps:
+      - checkout:
+          path: <<parameters.checkout_path>>
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build Docker image
+          command: docker build -t <<parameters.docker_image>>:latest -t <<parameters.docker_image>>:$CIRCLE_SHA1 .
+      - run:
+          name: Archive Docker image
+          command: docker save --output <<parameters.prefix_key>>.tar <<parameters.docker_image>>:latest <<parameters.docker_image>>:$CIRCLE_SHA1
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./<<parameters.prefix_key>>.tar
+
+  snyk-scan:
+    parameters:
+      archive:
+        type: string
+      image:
+        type: string
+    executor: docker-publisher
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - attach_workspace:
+          at: .
+      - run:
+          command: docker load -i <<parameters.archive>>
+      - snyk/scan:
+          severity-threshold: high
+          docker-image-name: <<parameters.image>>
+          fail-on-issues: true
+
+  docker-compose:
+    executor: docker-publisher
+    parameters:
+      working_directory:
+        type: string
+      command:
+        type: string
+    working_directory: <<parameters.working_directory>>
     steps:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
       - attach_workspace:
-          at: ~/project/network-device-inventory-service/target
+          at: /tmp/workspace
       - run:
-          name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest -t $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1 ~/project/network-device-inventory-service/
-      - snyk/scan:
-          severity-threshold: high
-          docker-image-name: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
-          fail-on-issues: true
-
+          name: Load Docker image(s)
+          command: |
+            for f in /tmp/workspace/*.tar; do
+              cat $f | docker load
+            done
       - run:
-          name: Archive Docker image
-          command: docker save --output network-device-inventory-service.tar $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:$CIRCLE_SHA1
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./network-device-inventory-service.tar
-
-  prometheus-service-docker-build:
-    executor: docker-publisher
-    steps:
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest -t $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:$CIRCLE_SHA1 ~/project/prometheus-service/
-      - snyk/scan:
-          severity-threshold: high
-          docker-image-name: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest
-          fail-on-issues: true
-      - run:
-          name: Archive Docker image(s)
-          command: docker save --output prometheus-service.tar $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:$CIRCLE_SHA1
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./prometheus-service.tar
-
-  grafana-service-docker-build:
-    executor: docker-publisher
-    steps:
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$GRAFANA_SERVICE:latest -t $CI_REGISTRY_USER/$GRAFANA_SERVICE:$CIRCLE_SHA1 ~/project/grafana-service/
-      - snyk/scan:
-          severity-threshold: high
-          docker-image-name: $CI_REGISTRY_USER/$GRAFANA_SERVICE:latest
-          fail-on-issues: true
-      - run:
-          name: Archive Docker image(s)
-          command: docker save --output grafana-service.tar $CI_REGISTRY_USER/$GRAFANA_SERVICE:latest $CI_REGISTRY_USER/$GRAFANA_SERVICE:$CIRCLE_SHA1
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./grafana-service.tar
-
-  nginx-service-docker-build:
-    executor: docker-publisher
-    steps:
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$NGINX_SERVICE:latest -t $CI_REGISTRY_USER/$NGINX_SERVICE:$CIRCLE_SHA1 ~/project/nginx-service/
-      - snyk/scan:
-          severity-threshold: high
-          docker-image-name: $CI_REGISTRY_USER/$NGINX_SERVICE:latest
-          fail-on-issues: true
-      - run:
-          name: Archive Docker image(s)
-          command: docker save --output nginx-service.tar $CI_REGISTRY_USER/$NGINX_SERVICE:latest $CI_REGISTRY_USER/$NGINX_SERVICE:$CIRCLE_SHA1
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./nginx-service.tar
-
-  flyway-service-docker-build:
-    executor: docker-publisher
-    steps:
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Build Docker image
-          command: docker build -t $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest -t $CI_REGISTRY_USER/$FLYWAY_SERVICE:$CIRCLE_SHA1 ~/project/flyway-service/
-      - snyk/scan:
-          severity-threshold: high
-          docker-image-name: $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest
-          fail-on-issues: true
-      - run:
-          name: Archive Docker image(s)
-          command: docker save --output flyway-service.tar $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest $CI_REGISTRY_USER/$FLYWAY_SERVICE:$CIRCLE_SHA1
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./flyway-service.tar
+          name : Docker Compose UP
+          command: <<parameters.command>>
 
   docker-publish:
     executor: docker-publisher
@@ -202,68 +211,249 @@ jobs:
             
 
 
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   network-device-inventory-development-workflow:
     jobs:
-      - network-device-inventory-service-maven-build
-      - network-device-inventory-service-docker-build:
+      - maven-build:
+          name: maven-build-inventory
+          working_directory: ~/network-device-inventory/network-device-inventory-service
+          checkout_path: ~/network-device-inventory
+          prefix_key: network-device-inventory-service
+      - maven-docker-build:
+          name: docker-build-inventory
+          working_directory: ~/network-device-inventory/network-device-inventory-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE
+          prefix_key: network-device-inventory-service
           requires:
-            - network-device-inventory-service-maven-build
-      - prometheus-service-docker-build
-      - grafana-service-docker-build
-      - nginx-service-docker-build
-      - flyway-service-docker-build
+            - maven-build-inventory
+      - sonar-cloud:
+          name: sonar-cloud-inventory
+          command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION
+          context:
+            - SonarCloud
+          requires:
+            - docker-build-inventory
+      - snyk-scan:
+          name: snyk-scan-inventory
+          archive: network-device-inventory-service.tar
+          image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
+          requires:
+            - sonar-cloud-inventory
+      - docker-build:
+          name: docker-build-prometheus
+          working_directory: ~/network-device-inventory/prometheus-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE
+          prefix_key: prometheus-service
+      - snyk-scan:
+          name: snyk-scan-prometheus
+          archive: prometheus-service.tar
+          image: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest
+          requires:
+            - docker-build-prometheus
+      - docker-build:
+          name: docker-build-grafana
+          working_directory: ~/network-device-inventory/grafana-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$GRAFANA_SERVICE
+          prefix_key: grafana-service
+      - snyk-scan:
+          name: snyk-scan-grafana
+          archive: grafana-service.tar
+          image: $CI_REGISTRY_USER/$GRAFANA_SERVICE:latest
+          requires:
+            - docker-build-grafana
+      - docker-build:
+          name: docker-build-nginx
+          working_directory: ~/network-device-inventory/nginx-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$NGINX_SERVICE
+          prefix_key: nginx-service
+      - snyk-scan:
+          name: snyk-scan-nginx
+          archive: nginx-service.tar
+          image: $CI_REGISTRY_USER/$NGINX_SERVICE:latest
+          requires:
+            - docker-build-nginx
+      - docker-build:
+          name: docker-build-flyway
+          working_directory: ~/network-device-inventory/flyway-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$FLYWAY_SERVICE
+          prefix_key: flyway-service
+      - snyk-scan:
+          name: snyk-scan-flyway
+          archive: flyway-service.tar
+          image: $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest
+          requires:
+            - docker-build-flyway
+      - docker-compose:
+          name: docker-compose-up
+          working_directory: ~/network-device-inventory
+          command: COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
+          requires:
+            - snyk-scan-inventory
+            - snyk-scan-prometheus
+            - snyk-scan-grafana
+            - snyk-scan-nginx
+            - snyk-scan-flyway
 
   network-device-inventory-release-workflow:
     jobs:
-      - network-device-inventory-service-maven-build:
+      - maven-build:
+          name: maven-build-inventory
+          working_directory: ~/network-device-inventory/network-device-inventory-service
+          checkout_path: ~/network-device-inventory
+          prefix_key: network-device-inventory-service
           filters:
             tags:
               only: /^v.*/
             branches:
               ignore: /.*/
-      - network-device-inventory-service-docker-build:
+      - maven-docker-build:
+          name: docker-build-inventory
+          working_directory: ~/network-device-inventory/network-device-inventory-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE
+          prefix_key: network-device-inventory-service
           requires:
-            - network-device-inventory-service-maven-build
+            - maven-build-inventory
           filters:
             tags:
               only: /^v.*/
             branches:
               ignore: /.*/
-      - prometheus-service-docker-build:
+      - sonar-cloud:
+          name: sonar-cloud-inventory
+          command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION
+          context:
+            - SonarCloud
+          requires:
+            - docker-build-inventory
           filters:
             tags:
               only: /^v.*/
             branches:
               ignore: /.*/
-      - grafana-service-docker-build:
+      - snyk-scan:
+          name: snyk-scan-inventory
+          archive: network-device-inventory-service.tar
+          image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
+          requires:
+            - sonar-cloud-inventory
           filters:
             tags:
               only: /^v.*/
             branches:
               ignore: /.*/
-      - nginx-service-docker-build:
+      - docker-build:
+          name: docker-build-prometheus
+          working_directory: ~/network-device-inventory/prometheus-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE
+          prefix_key: prometheus-service
           filters:
             tags:
               only: /^v.*/
             branches:
               ignore: /.*/
-      - flyway-service-docker-build:
+      - snyk-scan:
+          name: snyk-scan-prometheus
+          archive: prometheus-service.tar
+          image: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE:latest
+          requires:
+            - docker-build-prometheus
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - docker-build:
+          name: docker-build-grafana
+          working_directory: ~/network-device-inventory/grafana-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$GRAFANA_SERVICE
+          prefix_key: grafana-service
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - snyk-scan:
+          name: snyk-scan-grafana
+          archive: grafana-service.tar
+          image: $CI_REGISTRY_USER/$GRAFANA_SERVICE:latest
+          requires:
+            - docker-build-grafana
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - docker-build:
+          name: docker-build-nginx
+          working_directory: ~/network-device-inventory/nginx-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$NGINX_SERVICE
+          prefix_key: nginx-service
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - snyk-scan:
+          name: snyk-scan-nginx
+          archive: nginx-service.tar
+          image: $CI_REGISTRY_USER/$NGINX_SERVICE:latest
+          requires:
+            - docker-build-nginx
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - docker-build:
+          name: docker-build-flyway
+          working_directory: ~/network-device-inventory/flyway-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$FLYWAY_SERVICE
+          prefix_key: flyway-service
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - snyk-scan:
+          name: snyk-scan-flyway
+          archive: flyway-service.tar
+          image: $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest
+          requires:
+            - docker-build-flyway
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - docker-compose:
+          name: docker-compose-up
+          working_directory: ~/network-device-inventory
+          command: COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
+          requires:
+            - snyk-scan-inventory
+            - snyk-scan-prometheus
+            - snyk-scan-grafana
+            - snyk-scan-nginx
+            - snyk-scan-flyway
           filters:
             tags:
               only: /^v.*/
             branches:
               ignore: /.*/
       - docker-publish:
+          name: docker-push
           requires:
-            - network-device-inventory-service-docker-build
-            - prometheus-service-docker-build
-            - grafana-service-docker-build
-            - nginx-service-docker-build
-            - flyway-service-docker-build
-          filters:
+            - docker-compose-up
             tags:
               only: /^v.*/
             branches:
