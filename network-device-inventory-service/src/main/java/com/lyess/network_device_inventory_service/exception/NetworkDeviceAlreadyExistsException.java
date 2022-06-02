@@ -11,16 +11,8 @@ public class NetworkDeviceAlreadyExistsException extends RuntimeException {
 
     private final static String DEFAULT_MESSAGE = "network device already exists.";
 
-    public NetworkDeviceAlreadyExistsException() {
-        this(DEFAULT_MESSAGE);
-    }
-
     public NetworkDeviceAlreadyExistsException(NetworkDevice networkDevice) {
-        this(networkDevice.getClass().getCanonicalName() + " with id " + networkDevice.getIpAddress() + " already exists");
-    }
-
-    public NetworkDeviceAlreadyExistsException(String message) {
-        super(message);
+        super(networkDevice.getClass().getCanonicalName() + " with id " + networkDevice.getIpAddress() + " already exists");
     }
 
 }
