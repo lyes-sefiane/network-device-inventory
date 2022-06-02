@@ -78,9 +78,11 @@ https://github.com/lyes-s/network-device-inventory.git
 
 ## Next Features : Roadmap
 
-- [ ] Design and Develop a Graph Service with [GO](https://go.dev/)
-- [ ] [JaCoCo](https://www.eclemma.org/jacoco/) Report Generation & Integration with [SonarCloud](https://sonarcloud.io/) 
-- [ ] Integrate & Implement [CQRS](https://www.confluent.io/blog/event-sourcing-cqrs-stream-processing-apache-kafka-whats-connection/) with [Kafka](https://kafka.apache.org/)
+- [ ] Design and Develop a Graph Service with [Spring Boot](https://spring.io/projects/spring-boot) and [MongoDB](https://www.mongodb.com/) | Build Faster. Build Smarter.  
+- [ ] Integrate Caching ( [Spring Data Redis](https://spring.io/projects/spring-data-redis) ) with [Redis](https://redis.io/)  
+- [ ] Integrate [JaCoCo](https://www.eclemma.org/jacoco/) to generate report with [SonarCloud](https://sonarcloud.io/)
+- [ ] Design [Load Balancing with NGINX and Consul Template](https://learn.hashicorp.com/tutorials/consul/load-balancing-nginx?in=consul/integrations)
+- [ ] Design, Implement & Integrate [CQRS](https://www.confluent.io/blog/event-sourcing-cqrs-stream-processing-apache-kafka-whats-connection/) with [Kafka](https://kafka.apache.org/)
 - [ ] Integrate [Graph Visualization](https://github.com/lyes-s/graph-visualization)
 - [ ] Secure Network Device Inventory & Graph Services with [Keycloak](https://www.keycloak.org/)
 - [ ] Centralize Tracing with [ELK Stack](https://www.elastic.co/elastic-stack/)
