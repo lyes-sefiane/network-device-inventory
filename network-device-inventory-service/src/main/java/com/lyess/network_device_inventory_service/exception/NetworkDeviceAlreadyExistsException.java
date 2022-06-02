@@ -9,8 +9,6 @@ import com.lyess.network_device_inventory_service.domain.entites.NetworkDevice;
  */
 public class NetworkDeviceAlreadyExistsException extends RuntimeException {
 
-    private final static String DEFAULT_MESSAGE = "network device already exists.";
-
     public NetworkDeviceAlreadyExistsException(NetworkDevice networkDevice) {
         super(networkDevice.getClass().getCanonicalName() + " with id " + networkDevice.getIpAddress() + " already exists");
     }
