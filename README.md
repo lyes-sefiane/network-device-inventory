@@ -100,7 +100,7 @@ CircleCI received exit code 1
 
 * [lyes-s/network-device-inventory/SonarCloud-Code-Quality-and-Code-Security/](https://github.com/lyes-s/network-device-inventory/wiki/SonarCloud-Code-Quality-and-Code-Security)
 
-![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/sonarcloud.PNG)
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/sonarcloud-v2.PNG)
 
 
 ## Requirements
