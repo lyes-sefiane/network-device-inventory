@@ -38,7 +38,7 @@ COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
 
 * [lyes-s/network-device-inventory/CircleCI-Continuous-Integration-and-Delivery/](https://github.com/lyes-s/network-device-inventory/wiki/CircleCI-Continuous-Integration-and-Delivery)
 
-![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/release-workflow-v3.PNG)
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/release-workflow-v4.PNG)
 
 
 ## Snyk: 'So Now You Know'
