@@ -34,8 +34,11 @@ jobs:
         default: cimg/openjdk:11.0.13
       command:
         type: string
+      working_directory:
+        type: string
     docker:
       - image: <<parameters.image>>
+    working_directory: <<parameters.working_directory>>
     steps:
       - checkout
       - run:
@@ -283,6 +286,7 @@ workflows:
             - docker-build-flyway
       - sonar-cloud:
           name: sonar-cloud-inventory
+          working_directory: ~/network-device-inventory
           command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION -Dsonar.coverage.jacoco.xmlReportPaths=$JACOCO_AGGREGATED_XML_REPORT_PATH
           context:
             - SonarCloud
@@ -425,6 +429,7 @@ workflows:
               ignore: /.*/
       - sonar-cloud:
           name: sonar-cloud-inventory
+          working_directory: ~/network-device-inventory
           command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION -Dsonar.coverage.jacoco.xmlReportPaths=$JACOCO_AGGREGATED_XML_REPORT_PATH
           context:
             - SonarCloud
