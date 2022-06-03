@@ -232,7 +232,7 @@ workflows:
           archive: network-device-inventory-service.tar
           image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
           requires:
-            - name: docker-build-inventory
+            - docker-build-inventory
       - docker-build:
           name: docker-build-prometheus
           working_directory: ~/network-device-inventory/prometheus-service
