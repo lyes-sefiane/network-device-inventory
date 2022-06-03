@@ -227,19 +227,12 @@ workflows:
           prefix_key: network-device-inventory-service
           requires:
             - maven-build-inventory
-      - sonar-cloud:
-          name: sonar-cloud-inventory
-          command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION
-          context:
-            - SonarCloud
-          requires:
-            - docker-build-inventory
       - snyk-scan:
           name: snyk-scan-inventory
           archive: network-device-inventory-service.tar
           image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
           requires:
-            - sonar-cloud-inventory
+            - docker-build-inventory
       - docker-build:
           name: docker-build-prometheus
           working_directory: ~/network-device-inventory/prometheus-service
@@ -288,16 +281,23 @@ workflows:
           image: $CI_REGISTRY_USER/$FLYWAY_SERVICE:latest
           requires:
             - docker-build-flyway
-      - docker-compose:
-          name: docker-compose-up
-          working_directory: ~/network-device-inventory
-          command: COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
+      - sonar-cloud:
+          name: sonar-cloud-inventory
+          command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION -Dsonar.coverage.jacoco.xmlReportPaths=$JACOCO_AGGREGATED_XML_REPORT_PATH
+          context:
+            - SonarCloud
           requires:
             - snyk-scan-inventory
             - snyk-scan-prometheus
             - snyk-scan-grafana
             - snyk-scan-nginx
             - snyk-scan-flyway
+      - docker-compose:
+          name: docker-compose-up
+          working_directory: ~/network-device-inventory
+          command: COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
+          requires:
+            - sonar-cloud-inventory
 
   network-device-inventory-release-workflow:
     jobs:
@@ -324,24 +324,12 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
-      - sonar-cloud:
-          name: sonar-cloud-inventory
-          command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION
-          context:
-            - SonarCloud
-          requires:
-            - docker-build-inventory
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
       - snyk-scan:
           name: snyk-scan-inventory
           archive: network-device-inventory-service.tar
           image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE:latest
           requires:
-            - sonar-cloud-inventory
+            - docker-build-inventory
           filters:
             tags:
               only: /^v.*/
@@ -435,16 +423,28 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
-      - docker-compose:
-          name: docker-compose-up
-          working_directory: ~/network-device-inventory
-          command: COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
+      - sonar-cloud:
+          name: sonar-cloud-inventory
+          command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION -Dsonar.coverage.jacoco.xmlReportPaths=$JACOCO_AGGREGATED_XML_REPORT_PATH
+          context:
+            - SonarCloud
           requires:
             - snyk-scan-inventory
             - snyk-scan-prometheus
             - snyk-scan-grafana
             - snyk-scan-nginx
             - snyk-scan-flyway
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - docker-compose:
+          name: docker-compose-up
+          working_directory: ~/network-device-inventory
+          command: COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
+          requires:
+            - sonar-cloud-inventory
           filters:
             tags:
               only: /^v.*/
