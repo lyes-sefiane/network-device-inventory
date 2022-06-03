@@ -14,6 +14,7 @@
 	</properties>
 	<modules>
 		<module>network-device-inventory-service</module>
+		<module>jacoco-coverage-report-service</module>
 	</modules>
 
 </project>
