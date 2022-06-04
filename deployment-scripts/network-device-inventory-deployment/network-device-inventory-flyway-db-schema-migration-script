@@ -55,7 +55,8 @@ done
 
 ## Flyway Up, Execute SQL Migration, Log 10 line then Down.
 runDockerCommands() {
-docker-compose -f docker-compose.yml --profile inventory --env-file .env up -d flyway;
+docker-compose -f docker-compose/network-device-inventory.yml --env-file docker-compose/.env up -d flyway;
+
 # Sleep 10 S
 sleep 10;
 # 10 of lines to show from the end of the logs

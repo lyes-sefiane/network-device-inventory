@@ -1,0 +1,86 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgreSQL
+    restart: on-failure
+    expose:
+      - ${POSTGRES_PORT}
+    healthcheck:
+      test: pg_isready -d ${POSTGRES_DB} -U ${POSTGRES_USER}
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - microservices
+
+  flyway:
+    image: lsefiane/flyway-service:latest
+    container_name: flyway
+    command: -locations=filesystem:/flyway/sql -connectRetries=60 migrate
+    environment:
+      FLYWAY_USER: ${POSTGRES_USER}
+      FLYWAY_PASSWORD: ${POSTGRES_PASSWORD}
+      FLYWAY_URL: ${POSTGRES_URL}
+    depends_on:
+      - postgres
+    networks:
+      - microservices
+
+  network-device-inventory:
+    image: lsefiane/network-device-inventory-service:latest
+    container_name: network-device-inventory
+    restart: on-failure
+    expose:
+      - ${NETWORK_DEVICE_INVENTORY_PORT}
+    healthcheck:
+      test: wget --no-verbose --spider http://localhost:8080/inventory/api/actuator/health || exit 1
+      interval: 25s
+      timeout: 3s
+      retries: 3
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SPRING_JPA_DATABASE_PLATFORM: ${SPRING_JPA_DATABASE_PLATFORM}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_DRIVERCLASSNAME: ${SPRING_DATASOURCE_DRIVERCLASSNAME}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_DATASOURCE_INITIALIZATION_MODE: ${SPRING_DATASOURCE_INITIALIZATION_MODE}
+      SPRING_CLOUD_CONSUL_ENABLED: ${SPRING_CLOUD_CONSUL_ENABLED}
+      SPRING_CLOUD_CONSUL_HOST: ${SPRING_CLOUD_CONSUL_HOST}
+      SPRING_CLOUD_CONSUL_PORT: ${SPRING_CLOUD_CONSUL_PORT}
+      SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKURL: ${SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKURL}
+      SPRING_APPLICATION_NAME: ${SPRING_APPLICATION_NAME}
+      MANAGEMENT_METRICS_TAGS_APPLICATION: ${SPRING_APPLICATION_NAME}
+      SERVER_TOMCAT_MBEANREGISTRY_ENABLED: ${SERVER_TOMCAT_MBEANREGISTRY_ENABLED}
+    depends_on:
+      - postgres
+      - consul
+    networks:
+      - microservices
+
+  consul:
+    image: consul:latest
+    container_name: consul
+    command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
+    restart: always
+    expose:
+      - ${CONSUL_PORT}
+    environment:
+      - CONSUL_BIND_INTERFACE=${CONSUL_BIND_INTERFACE}
+      - UI_CONTENT_PATH=${UI_CONTENT_PATH}
+    networks:
+      - microservices
+
+
+volumes:
+  pgdata:
+
+networks:
+  microservices:

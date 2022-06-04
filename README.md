@@ -23,8 +23,14 @@
 
 * [lyes-s/network-device-inventory-service/](https://github.com/lyes-s/network-device-inventory/tree/master/network-device-inventory-service)
 
+Note :
+
+* Replace 'expose' by 'port' in the network-device-inventory.yml so that the service(s) will be reachable outside the docker for this context
+
 ```
-COMPOSE_PROFILES=inventory docker-compose --env-file .env  up -d
+cd docker-compose/
+
+docker-compose -f network-device-inventory.yml --env-file .env  up -d
 ```
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/inventory-restful-web-service.PNG)
@@ -34,7 +40,9 @@ COMPOSE_PROFILES=inventory docker-compose --env-file .env  up -d
 * [lyes-s/network-device-inventory/monitoring/](https://github.com/lyes-s/network-device-inventory/wiki/Monitoring)
 
 ```
-COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
+cd docker-compose/
+
+docker-compose -f network-device-inventory.yml -f monitoring.yml -f gateway.yml --env-file .env  up -d
 ```
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/monitoring-system-design-v2.PNG)

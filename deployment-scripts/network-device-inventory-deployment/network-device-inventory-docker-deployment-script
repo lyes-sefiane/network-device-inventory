@@ -32,6 +32,7 @@ echo "
 
 declare -a options=(
 	"Docker Compose Up"
+	"Docker Compose Down"
 	"quit"
 )
 
@@ -51,10 +52,14 @@ do
     "Docker Compose Up")
           echo "Docker Compose Up ...";
           docker-compose pull network-device-inventory && \
-          docker-compose -f docker-compose.yml --profile inventory --env-file .env up -d;
+          docker-compose -f docker-compose/network-device-inventory.yml --env-file docker-compose/.env up -d
           break;;
-
     # Choice : 2
+    "Docker Compose Down")
+          echo "Docker Compose Down ...";
+          docker-compose -f docker-compose/network-device-inventory.yml down
+          break;;
+    # Choice : 3
     quit)
           echo $(uname) ": Bye !" ;
           break;;

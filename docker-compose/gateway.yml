@@ -1,0 +1,17 @@
+version: '3.9'
+services:
+  nginx:
+    image: lsefiane/nginx-service:latest
+    container_name: nginx
+    restart: on-failure
+    ports:
+      - ${NGINX_PORT}:${NGINX_PORT}
+    depends_on:
+      - network-device-inventory
+      - grafana
+    networks:
+      - microservices
+
+
+networks:
+  microservices:
