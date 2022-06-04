@@ -47,14 +47,14 @@ COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
 
 * [lyes-s/network-device-inventory/SonarCloud-Code-Quality-and-Code-Security/](https://github.com/lyes-s/network-device-inventory/wiki/SonarCloud-Code-Quality-and-Code-Security)
 
-![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/sonarcloud-v2.PNG)
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/sonarcloud-v3.PNG)
 
 
 ## CircleCI: Continuous Integration and Delivery Documentation
 
 * [lyes-s/network-device-inventory/CircleCI-Continuous-Integration-and-Delivery/](https://github.com/lyes-s/network-device-inventory/wiki/CircleCI-Continuous-Integration-and-Delivery)
 
-![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/release-workflow-v5.PNG)
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/release-workflow-v6.PNG)
 
 ## Requirements
 ```
@@ -75,12 +75,12 @@ https://github.com/lyes-s/network-device-inventory.git
 - [x] Build Docker Images In a [CircleCI](https://circleci.com/) Pipeline & Push them to [DockerHub](https://hub.docker.com/)
 - [x] Securing Code, Dependencies, Containers with [Snyk](https://snyk.io/)
 - [x] Enhance [CircleCI](https://circleci.com/) workflows with [SonarCloud](https://sonarcloud.io/) continuous Code Quality and Code Security analysis
+- [x] Integrate [JaCoCo](https://www.eclemma.org/jacoco/) to Generate & Aggregate Coverage Reports in [CircleCI](https://circleci.com/) for [SonarCloud](https://sonarcloud.io/) Analysis
 
 ## Next Features : Roadmap
 
 - [ ] Design and Develop a Graph Service with [Spring Boot](https://spring.io/projects/spring-boot) and [MongoDB](https://www.mongodb.com/) | Build Faster. Build Smarter.  
-- [ ] Integrate Caching ( [Spring Data Redis](https://spring.io/projects/spring-data-redis) ) with [Redis](https://redis.io/)  
-- [ ] Integrate [JaCoCo](https://www.eclemma.org/jacoco/) to generate report with [SonarCloud](https://sonarcloud.io/)
+- [ ] Integrate Caching ( [Spring Data Redis](https://spring.io/projects/spring-data-redis) ) with [Redis](https://redis.io/)
 - [ ] Design [Load Balancing with NGINX and Consul Template](https://learn.hashicorp.com/tutorials/consul/load-balancing-nginx?in=consul/integrations)
 - [ ] Design, Implement & Integrate [CQRS](https://www.confluent.io/blog/event-sourcing-cqrs-stream-processing-apache-kafka-whats-connection/) with [Kafka](https://kafka.apache.org/)
 - [ ] Integrate [Graph Visualization](https://github.com/lyes-s/graph-visualization)
