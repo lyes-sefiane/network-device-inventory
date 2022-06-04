@@ -169,9 +169,12 @@ jobs:
         type: string
       command:
         type: string
+      checkout_path:
+        type: string
     working_directory: <<parameters.working_directory>>
     steps:
-      - checkout
+      - checkout:
+          path: <<parameters.checkout_path>>
       - setup_remote_docker:
           docker_layer_caching: true
       - attach_workspace:
@@ -300,8 +303,9 @@ workflows:
             - snyk-scan-flyway
       - docker-compose:
           name: docker-compose-up
-          working_directory: ~/network-device-inventory
-          command: COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
+          working_directory: ~/network-device-inventory/docker-compose
+          checkout_path: ~/network-device-inventory
+          command: docker-compose -f network-device-inventory.yml -f monitoring.yml -f gateway.yml --env-file .env  up -d
           requires:
             - sonar-cloud-inventory
 
@@ -448,8 +452,9 @@ workflows:
               ignore: /.*/
       - docker-compose:
           name: docker-compose-up
-          working_directory: ~/network-device-inventory
-          command: COMPOSE_PROFILES=inventory,monitoring docker-compose --env-file .env  up -d
+          working_directory: ~/network-device-inventory/docker-compose
+          checkout_path: ~/network-device-inventory
+          command: docker-compose -f network-device-inventory.yml -f monitoring.yml -f gateway.yml --env-file .env  up -d
           requires:
             - sonar-cloud-inventory
           filters:
