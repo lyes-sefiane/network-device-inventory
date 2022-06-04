@@ -42,6 +42,9 @@
 						<goals>
 							<goal>report-aggregate</goal>
 						</goals>
+						<configuration>
+							<outputDirectory>../target/site/jacoco-aggregate</outputDirectory>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
