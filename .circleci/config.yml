@@ -289,7 +289,7 @@ workflows:
       - sonar-cloud:
           name: sonar-cloud-inventory
           working_directory: ~/network-device-inventory
-          command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION -Dsonar.coverage.jacoco.xmlReportPaths=$JACOCO_AGGREGATED_XML_REPORT_PATH
+          command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION
           context:
             - SonarCloud
           requires:
@@ -432,7 +432,7 @@ workflows:
       - sonar-cloud:
           name: sonar-cloud-inventory
           working_directory: ~/network-device-inventory
-          command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION -Dsonar.coverage.jacoco.xmlReportPaths=$JACOCO_AGGREGATED_XML_REPORT_PATH
+          command: mvn verify sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.host.url=$HOST_URL -Dsonar.organization=$ORGANIZATION
           context:
             - SonarCloud
           requires:
