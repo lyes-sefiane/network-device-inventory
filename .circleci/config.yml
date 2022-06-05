@@ -305,7 +305,7 @@ workflows:
           name: docker-compose-up
           working_directory: ~/network-device-inventory/docker-compose
           checkout_path: ~/network-device-inventory
-          command: docker-compose -f network-device-inventory.yml -f monitoring.yml -f gateway.yml --env-file .env  up -d
+          command: docker-compose -f service-registry.yml -f network-device-inventory.yml -f monitoring.yml -f gateway.yml --env-file .env  up -d
           requires:
             - sonar-cloud-inventory
 
@@ -454,7 +454,7 @@ workflows:
           name: docker-compose-up
           working_directory: ~/network-device-inventory/docker-compose
           checkout_path: ~/network-device-inventory
-          command: docker-compose -f network-device-inventory.yml -f monitoring.yml -f gateway.yml --env-file .env  up -d
+          command: docker-compose -f service-registry.yml -f network-device-inventory.yml -f monitoring.yml -f gateway.yml --env-file .env  up -d
           requires:
             - sonar-cloud-inventory
           filters:
