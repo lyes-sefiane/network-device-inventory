@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  consul:
+    image: consul:latest
+    container_name: consul
+    command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
+    restart: always
+    expose:
+      - ${CONSUL_PORT}
+    environment:
+      - CONSUL_BIND_INTERFACE=${CONSUL_BIND_INTERFACE}
+      - UI_CONTENT_PATH=${UI_CONTENT_PATH}
+    networks:
+      - microservices

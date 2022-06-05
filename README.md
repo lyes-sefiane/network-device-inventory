@@ -13,13 +13,25 @@
 
 # Network Device Inventory Microservices
 
+### Wiki
+
 * [lyes-s/network-device-inventory-microservices/wiki](https://github.com/lyes-s/network-device-inventory/wiki)
+
+### Docker Compose
+
+```
+cd docker-compose/
+
+docker-compose -f service-registry.yml -f network-device-inventory.yml -f monitoring.yml -f gateway.yml --env-file .env  up -d
+```
+
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/monitoring-system-design-v2.PNG)
 
 ## The Twelve Factor App Methodology
 
 * [lyes-s/the-twelve-factor-app-methodology](https://github.com/lyes-s/network-device-inventory/wiki/The-Twelve-Factor-App-Methodology-%F0%9F%94%A5)
 
-## Network Device Inventory Service Documentation
+## Network Device Inventory Service
 
 ### Wiki
 
@@ -30,46 +42,44 @@
 * [lyes-s/swaggerhub.com/apis-docs/lye-s/network-device_inventory/1.0](https://app.swaggerhub.com/apis-docs/lye-s/network-device_inventory/1.0)
 
 ### Docker Compose
+
+* Regarding the network device inventory service local dev/test, please replace "expose" by "port" in the manifest so that the endpoints will be reachable outside the docker.  
+
 ```
 cd docker-compose/
 
-docker-compose -f network-device-inventory.yml --env-file .env  up -d
+docker-compose -f service-registry.yml -f network-device-inventory.yml -f --env-file .env  up -d
 ```
 
-![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/inventory-restful-web-service.PNG)
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/inventory-restful-web-service-v2.PNG)
 
-# Monitoring Documentation
+## Monitoring
 
 ### Wiki
 
 * [lyes-s/network-device-inventory/monitoring](https://github.com/lyes-s/network-device-inventory/wiki/Monitoring)
 
-### Docker Compose
+## Snyk: 'So Now You Know'
 
-```
-cd docker-compose/
-
-docker-compose -f network-device-inventory.yml -f monitoring.yml -f gateway.yml --env-file .env  up -d
-```
-
-![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/monitoring-system-design-v2.PNG)
-
-
-# Snyk: 'So Now You Know' Documentation
+### Wiki
 
 * [lyes-s/network-device-inventory/Snyk-Securing-Code-Dependencies-Containers-and-Infrastructure-as-Code](https://github.com/lyes-s/network-device-inventory/wiki/Snyk-Securing-Code,-Dependencies,-Containers-and-Infrastructure-as-Code)
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/CircleCiBuild.PNG)
 
 
-# SonarCloud: Code Quality and Code Security Documentation
+## SonarCloud: Code Quality and Code Security
+
+### Wiki
 
 * [lyes-s/network-device-inventory/SonarCloud-Code-Quality-and-Code-Security](https://github.com/lyes-s/network-device-inventory/wiki/SonarCloud-Code-Quality-and-Code-Security)
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/sonarcloud-v3.PNG)
 
 
-# CircleCI: Continuous Integration and Delivery Documentation
+## CircleCI: Continuous Integration and Delivery
+
+### Wiki
 
 * [lyes-s/network-device-inventory/CircleCI-Continuous-Integration-and-Delivery](https://github.com/lyes-s/network-device-inventory/wiki/CircleCI-Continuous-Integration-and-Delivery)
 
@@ -104,7 +114,8 @@ https://github.com/lyes-s/network-device-inventory.git
 - [ ] Design, Implement & Integrate [CQRS](https://www.confluent.io/blog/event-sourcing-cqrs-stream-processing-apache-kafka-whats-connection/) with [Kafka](https://kafka.apache.org/)
 - [ ] Integrate [Graph Visualization](https://github.com/lyes-s/graph-visualization)
 - [ ] Secure Network Device Inventory & Graph Services with [Keycloak](https://www.keycloak.org/)
-- [ ] Centralize Tracing with [ELK Stack](https://www.elastic.co/elastic-stack/)
+- [ ] Integrate [Zipkin](https://zipkin.io/) & [Spring Cloud Sleuth](https://spring.io/projects/spring-cloud-sleuth) as distributed tracing system
+- [ ] Centralize logging with [ELK Stack](https://www.elastic.co/elastic-stack/)
 - [ ] Deploy to [Kubernetes](https://kubernetes.io/)
 
 # Contributing
