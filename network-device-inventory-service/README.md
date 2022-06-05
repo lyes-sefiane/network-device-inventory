@@ -2,11 +2,11 @@
 
 ## OpenAPI/Swagger Documentation
 
-* [lyes-s.github.io/network-device-inventory/](https://lyes-s.github.io/network-device-inventory/)
+* [lyes-s/swaggerhub.com/apis-docs/lye-s/network-device_inventory/1.0](https://app.swaggerhub.com/apis-docs/lye-s/network-device_inventory/1.0)
 
-## Network Device Inventory Wiki
+## Network Device Inventory ServiceWiki
 
-* [lyes-s/network-device-inventory/wiki](https://github.com/lyes-s/network-device-inventory/wiki)
+* [lyes-s/network-device-inventory-service](https://github.com/lyes-s/network-device-inventory/wiki/Network-Device-Inventory-Service-%F0%9F%A7%BE)
 
 ## Contributing
 

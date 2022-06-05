@@ -17,16 +17,19 @@
 
 ## The Twelve Factor App Methodology
 
-* [lyes-s/the-twelve-factor-app-methodology/](https://github.com/lyes-s/network-device-inventory/wiki/The-Twelve-Factor-App-Methodology-%F0%9F%94%A5)
+* [lyes-s/the-twelve-factor-app-methodology](https://github.com/lyes-s/network-device-inventory/wiki/The-Twelve-Factor-App-Methodology-%F0%9F%94%A5)
 
 ## Network Device Inventory Service Documentation
 
-* [lyes-s/network-device-inventory-service/](https://github.com/lyes-s/network-device-inventory/tree/master/network-device-inventory-service)
+### Wiki
 
-Note :
+* [lyes-s/network-device-inventory-service](https://github.com/lyes-s/network-device-inventory/tree/master/network-device-inventory-service)
 
-* Replace 'expose' by 'port' in the network-device-inventory.yml so that the service(s) will be reachable outside the docker for this context
+### OpenAPI/Swagger
 
+* [lyes-s/swaggerhub.com/apis-docs/lye-s/network-device_inventory/1.0](https://app.swaggerhub.com/apis-docs/lye-s/network-device_inventory/1.0)
+
+### Docker Compose
 ```
 cd docker-compose/
 
@@ -37,7 +40,11 @@ docker-compose -f network-device-inventory.yml --env-file .env  up -d
 
 # Monitoring Documentation
 
-* [lyes-s/network-device-inventory/monitoring/](https://github.com/lyes-s/network-device-inventory/wiki/Monitoring)
+### Wiki
+
+* [lyes-s/network-device-inventory/monitoring](https://github.com/lyes-s/network-device-inventory/wiki/Monitoring)
+
+### Docker Compose
 
 ```
 cd docker-compose/
@@ -50,21 +57,21 @@ docker-compose -f network-device-inventory.yml -f monitoring.yml -f gateway.yml 
 
 # Snyk: 'So Now You Know' Documentation
 
-* [lyes-s/network-device-inventory/Snyk-Securing-Code-Dependencies-Containers-and-Infrastructure-as-Code/](https://github.com/lyes-s/network-device-inventory/wiki/Snyk-Securing-Code,-Dependencies,-Containers-and-Infrastructure-as-Code)
+* [lyes-s/network-device-inventory/Snyk-Securing-Code-Dependencies-Containers-and-Infrastructure-as-Code](https://github.com/lyes-s/network-device-inventory/wiki/Snyk-Securing-Code,-Dependencies,-Containers-and-Infrastructure-as-Code)
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/CircleCiBuild.PNG)
 
 
 # SonarCloud: Code Quality and Code Security Documentation
 
-* [lyes-s/network-device-inventory/SonarCloud-Code-Quality-and-Code-Security/](https://github.com/lyes-s/network-device-inventory/wiki/SonarCloud-Code-Quality-and-Code-Security)
+* [lyes-s/network-device-inventory/SonarCloud-Code-Quality-and-Code-Security](https://github.com/lyes-s/network-device-inventory/wiki/SonarCloud-Code-Quality-and-Code-Security)
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/sonarcloud-v3.PNG)
 
 
 # CircleCI: Continuous Integration and Delivery Documentation
 
-* [lyes-s/network-device-inventory/CircleCI-Continuous-Integration-and-Delivery/](https://github.com/lyes-s/network-device-inventory/wiki/CircleCI-Continuous-Integration-and-Delivery)
+* [lyes-s/network-device-inventory/CircleCI-Continuous-Integration-and-Delivery](https://github.com/lyes-s/network-device-inventory/wiki/CircleCI-Continuous-Integration-and-Delivery)
 
 ![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/release-workflow-v6.PNG)
 
