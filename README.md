@@ -15,19 +15,11 @@
 
 ### Wiki
 
-* [lyes-s/network-device-inventory-microservices/wiki](https://github.com/lyes-s/network-device-inventory/wiki)
-
-### Docker Compose
-
-```
-cd docker-compose/
-
-docker-compose -f service-registry.yml -f network-device-inventory.yml -f monitoring.yml -f gateway.yml --env-file .env  up -d
-```
-
-![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/monitoring-system-design-v2.PNG)
+* [lyes-s/network-device-microservices/wiki](https://github.com/lyes-s/network-device-inventory/wiki)
 
 ## The Twelve Factor App Methodology
+
+### Wiki
 
 * [lyes-s/the-twelve-factor-app-methodology](https://github.com/lyes-s/network-device-inventory/wiki/The-Twelve-Factor-App-Methodology-%F0%9F%94%A5)
 
@@ -51,13 +43,23 @@ cd docker-compose/
 docker-compose -f service-registry.yml -f network-device-inventory.yml -f --env-file .env  up -d
 ```
 
-![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/inventory-restful-web-service-v2.PNG)
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/inventory-restful-web-service-v3.PNG)
 
 ## Monitoring
 
 ### Wiki
 
 * [lyes-s/network-device-inventory/monitoring](https://github.com/lyes-s/network-device-inventory/wiki/Monitoring)
+
+### Docker Compose
+
+```
+cd docker-compose/
+
+docker-compose -f service-registry.yml -f network-device-inventory.yml -f monitoring.yml -f gateway.yml --env-file .env  up -d
+```
+
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/monitoring-system-design-v2.PNG)
 
 ## Snyk: 'So Now You Know'
 
@@ -108,10 +110,9 @@ https://github.com/lyes-s/network-device-inventory.git
 
 # Next Features : Roadmap
 
-- [ ] Design and Develop a Graph Service with [Spring Boot](https://spring.io/projects/spring-boot) and [MongoDB](https://www.mongodb.com/) | Build Faster. Build Smarter.  
+- [ ] Develop a Graph Service with [Spring Boot](https://spring.io/projects/spring-boot) and [MongoDB](https://www.mongodb.com/) based on [CQRS](https://www.confluent.io/blog/event-sourcing-cqrs-stream-processing-apache-kafka-whats-connection/) and [Event Sourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) Design Patterns with [Kafka](https://kafka.apache.org/) | Build Faster. Build Smarter.  
 - [ ] Integrate Caching ( [Spring Data Redis](https://spring.io/projects/spring-data-redis) ) with [Redis](https://redis.io/)
 - [ ] Design [Load Balancing with NGINX and Consul Template](https://learn.hashicorp.com/tutorials/consul/load-balancing-nginx?in=consul/integrations)
-- [ ] Design, Implement & Integrate [CQRS](https://www.confluent.io/blog/event-sourcing-cqrs-stream-processing-apache-kafka-whats-connection/) with [Kafka](https://kafka.apache.org/)
 - [ ] Integrate [Graph Visualization](https://github.com/lyes-s/graph-visualization)
 - [ ] Secure Network Device Inventory & Graph Services with [Keycloak](https://www.keycloak.org/)
 - [ ] Integrate [Zipkin](https://zipkin.io/) & [Spring Cloud Sleuth](https://spring.io/projects/spring-cloud-sleuth) as distributed tracing system
