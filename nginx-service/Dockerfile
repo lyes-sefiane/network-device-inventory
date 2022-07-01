@@ -1,4 +1,5 @@
 FROM nginx:1.22-alpine
 ADD conf.d /etc/nginx/conf.d
-# sid (unstable) (libs): New Perl Compatible Regular Expression Library- 8 bit runtime files
-RUN apk add --no-cache pcre2=10.40-r0
+RUN apk add --update pcre2=10.40-r0 && \
+    add curl=7.83.1-r2 && \
+    rm -rf /var/cache/apk/*
