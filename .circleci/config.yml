@@ -277,3 +277,41 @@ workflows:
           image: $CI_REGISTRY_USER/$GRAFANA_SERVICE
           requires:
             - snyk-scan-grafana
+      - docker-build:
+          name: docker-build-nginx
+          working_directory: ~/network-device-inventory/nginx-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$NGINX_SERVICE
+          prefix_key: nginx-service
+      - snyk-scan:
+          name: snyk-scan-nginx
+          archive: nginx-service.tar
+          image: $CI_REGISTRY_USER/$NGINX_SERVICE
+          prefix_key: nginx-service
+          requires:
+            - docker-build-nginx
+      - docker-publish:
+          name: docker-push-nginx
+          archive: nginx-service.tar
+          image: $CI_REGISTRY_USER/$NGINX_SERVICE
+          requires:
+            - snyk-scan-nginx
+      - docker-build:
+          name: docker-build-flyway
+          working_directory: ~/network-device-inventory/flyway-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$FLYWAY_SERVICE
+          prefix_key: flyway-service
+      - snyk-scan:
+          name: snyk-scan-flyway
+          archive: flyway-service.tar
+          image: $CI_REGISTRY_USER/$FLYWAY_SERVICE
+          prefix_key: flyway-service
+          requires:
+            - docker-build-flyway
+      - docker-publish:
+          name: docker-push-flyway
+          archive: flyway-service.tar
+          image: $CI_REGISTRY_USER/$FLYWAY_SERVICE
+          requires:
+            - snyk-scan-flyway
