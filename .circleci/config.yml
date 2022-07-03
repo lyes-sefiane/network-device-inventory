@@ -184,9 +184,9 @@ jobs:
       - run:
           name: Publish Docker image(s)
           command: |
-            docker tag <<parameters.image>>:latest <<parameters.docker_image>>:$CIRCLE_SHA1
+            docker tag <<parameters.image>>:latest <<parameters.image>>:$CIRCLE_SHA1
             docker push <<parameters.image>>:latest
-            docker push <<parameters.docker_image>>:$CIRCLE_SHA1
+            docker push <<parameters.image>>:$CIRCLE_SHA1
       - run:
           name: Logout from DockerHub
           command: docker logout
