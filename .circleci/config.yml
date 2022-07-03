@@ -252,3 +252,9 @@ workflows:
           prefix_key: prometheus-service
           requires:
             - docker-build-prometheus
+      - docker-publish:
+          name: docker-push-prometheus
+          archive: prometheus-service.tar
+          image: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE
+          requires:
+            - snyk-scan-prometheus
