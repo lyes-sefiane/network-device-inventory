@@ -245,6 +245,8 @@ workflows:
           checkout_path: ~/network-device-inventory
           docker_image: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE
           prefix_key: prometheus-service
+          requires:
+            - sonar-cloud-inventory
       - snyk-scan:
           name: snyk-scan-prometheus
           archive: prometheus-service.tar
@@ -264,6 +266,8 @@ workflows:
           checkout_path: ~/network-device-inventory
           docker_image: $CI_REGISTRY_USER/$GRAFANA_SERVICE
           prefix_key: grafana-service
+          requires:
+            - sonar-cloud-inventory
       - snyk-scan:
           name: snyk-scan-grafana
           archive: grafana-service.tar
@@ -283,6 +287,8 @@ workflows:
           checkout_path: ~/network-device-inventory
           docker_image: $CI_REGISTRY_USER/$NGINX_SERVICE
           prefix_key: nginx-service
+          requires:
+            - sonar-cloud-inventory
       - snyk-scan:
           name: snyk-scan-nginx
           archive: nginx-service.tar
@@ -302,6 +308,8 @@ workflows:
           checkout_path: ~/network-device-inventory
           docker_image: $CI_REGISTRY_USER/$FLYWAY_SERVICE
           prefix_key: flyway-service
+          requires:
+            - sonar-cloud-inventory
       - snyk-scan:
           name: snyk-scan-flyway
           archive: flyway-service.tar
