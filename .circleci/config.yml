@@ -162,34 +162,12 @@ jobs:
           docker-image-name: <<parameters.image>>
           fail-on-issues: true
 
-  docker-compose:
-    executor: docker-publisher
-    parameters:
-      working_directory:
-        type: string
-      command:
-        type: string
-      checkout_path:
-        type: string
-    working_directory: <<parameters.working_directory>>
-    steps:
-      - checkout:
-          path: <<parameters.checkout_path>>
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - attach_workspace:
-          at: /tmp/workspace
-      - run:
-          name: Load Docker image(s)
-          command: |
-            for f in /tmp/workspace/*.tar; do
-              cat $f | docker load
-            done
-      - run:
-          name : Docker Compose UP
-          command: <<parameters.command>>
-
   docker-publish:
+    parameters:
+      archive:
+        type: string
+      image:
+        type: string
     executor: docker-publisher
     steps:
       - setup_remote_docker:
@@ -198,10 +176,7 @@ jobs:
           at: /tmp/workspace
       - run:
           name: Load Docker image(s)
-          command: |
-            for f in /tmp/workspace/*.tar; do
-              cat $f | docker load
-            done
+          command: docker load -i <<parameters.archive>>
       - run:
           name: Login to DockerHub
           command: |
@@ -209,10 +184,9 @@ jobs:
       - run:
           name: Publish Docker image(s)
           command: |
-            for image_name in $(docker images --format="{{.Repository}}:{{.Tag}}")
-            do
-              docker push $image_name
-            done
+            docker tag <<parameters.image>>:latest <<parameters.docker_image>>:$CIRCLE_SHA1
+            docker push <<parameters.image>>:latest
+            docker push <<parameters.docker_image>>:$CIRCLE_SHA1
       - run:
           name: Logout from DockerHub
           command: docker logout
@@ -249,3 +223,9 @@ workflows:
           image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE
           requires:
             - docker-build-inventory
+      - docker-publish:
+          name: docker-push-inventory
+          archive: network-device-inventory-service.tar
+          image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE
+          requires:
+            - snyk-scan-inventory
