@@ -85,7 +85,7 @@ docker-compose -f service-registry.yml -f network-device-inventory.yml -f monito
 
 * [lyes-s/network-device-inventory/CircleCI-Continuous-Integration-and-Delivery](https://github.com/lyes-s/network-device-inventory/wiki/CircleCI-Continuous-Integration-and-Delivery)
 
-![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/release-workflow-v6.PNG)
+![Image](https://raw.githubusercontent.com/wiki/lyes-s/network-device-inventory/images/release-workflow-v7.PNG)
 
 # Requirements
 ```
