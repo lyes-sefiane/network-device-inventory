@@ -230,12 +230,12 @@ workflows:
           name: snyk-scan-inventory
           archive: network-device-inventory-service.tar
           image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE
+          prefix_key: network-device-inventory-service
           requires:
             - docker-build-inventory
       - docker-publish:
           name: docker-push-inventory
           archive: network-device-inventory-service.tar
           image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE
-          prefix_key: network-device-inventory-service
           requires:
             - snyk-scan-inventory
