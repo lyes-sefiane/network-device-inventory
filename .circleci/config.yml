@@ -149,6 +149,8 @@ jobs:
         type: string
       image:
         type: string
+      prefix_key:
+        type: string
     executor: docker-publisher
     steps:
       - setup_remote_docker:
@@ -161,6 +163,13 @@ jobs:
           severity-threshold: high
           docker-image-name: <<parameters.image>>
           fail-on-issues: true
+      - run:
+          name: Archive Docker image
+          command: docker save --output <<parameters.prefix_key>>.tar <<parameters.image>>
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./<<parameters.prefix_key>>.tar
 
   docker-publish:
     parameters:
@@ -227,5 +236,6 @@ workflows:
           name: docker-push-inventory
           archive: network-device-inventory-service.tar
           image: $CI_REGISTRY_USER/$NETWORK_DEVICE_INVENTORY_SERVICE
+          prefix_key: network-device-inventory-service
           requires:
             - snyk-scan-inventory
