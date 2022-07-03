@@ -258,3 +258,22 @@ workflows:
           image: $CI_REGISTRY_USER/$PROMETHEUS_SERVICE
           requires:
             - snyk-scan-prometheus
+      - docker-build:
+          name: docker-build-grafana
+          working_directory: ~/network-device-inventory/grafana-service
+          checkout_path: ~/network-device-inventory
+          docker_image: $CI_REGISTRY_USER/$GRAFANA_SERVICE
+          prefix_key: grafana-service
+      - snyk-scan:
+          name: snyk-scan-grafana
+          archive: grafana-service.tar
+          image: $CI_REGISTRY_USER/$GRAFANA_SERVICE
+          prefix_key: grafana-service
+          requires:
+            - docker-build-grafana
+      - docker-publish:
+          name: docker-push-grafana
+          archive: grafana-service.tar
+          image: $CI_REGISTRY_USER/$GRAFANA_SERVICE
+          requires:
+            - snyk-scan-grafana
