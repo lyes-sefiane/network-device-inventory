@@ -1,3 +1,7 @@
+# MIT License
+
+[Copyright (c) 2022 Lyes S.](https://github.com/lyes-s/network-device-inventory/blob/master/LICENSE.md)
+
 # GitHub Badges
 
 [![CircleCI](https://circleci.com/gh/lyes-s/network-device-inventory/tree/master.svg?style=shield)](https://circleci.com/gh/lyes-s/network-device-inventory/tree/master)
@@ -11,17 +15,11 @@
 [![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/lyes-s/network-device-inventory/blob/master/LICENSE.md)
 
 
-# Network Device Inventory Microservices
+# Network Device Microservices
 
 ### Wiki
 
 * [lyes-s/network-device-microservices/wiki](https://github.com/lyes-s/network-device-inventory/wiki)
-
-## The Twelve Factor App Methodology
-
-### Wiki
-
-* [lyes-s/the-twelve-factor-app-methodology](https://github.com/lyes-s/network-device-inventory/wiki/The-Twelve-Factor-App-Methodology-%F0%9F%94%A5)
 
 ## Network Device Inventory Service
 
@@ -124,7 +122,3 @@ https://github.com/lyes-s/network-device-inventory.git
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 [Please make sure to update tests as appropriate](https://github.com/lyes-s/network-device-inventory/wiki/Application-Test-Suite-with-JUnit-5-&-Mockito-%F0%9F%8D%B8).
-
-# License
-
-[MIT](https://github.com/lyes-s/network-device-inventory/blob/master/LICENSE.md)
