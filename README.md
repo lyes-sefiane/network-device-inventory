@@ -106,17 +106,6 @@ https://github.com/lyes-s/network-device-inventory.git
 - [x] Enhance [CircleCI](https://circleci.com/) workflows with [SonarCloud](https://sonarcloud.io/) continuous Code Quality and Code Security analysis
 - [x] Integrate [JaCoCo](https://www.eclemma.org/jacoco/) to Generate & Aggregate Coverage Reports in [CircleCI](https://circleci.com/) for [SonarCloud](https://sonarcloud.io/) Analysis
 
-# Next Features : Roadmap
-
-- [ ] Develop a Graph Service with [Spring Boot](https://spring.io/projects/spring-boot) and [MongoDB](https://www.mongodb.com/) based on [CQRS](https://www.confluent.io/blog/event-sourcing-cqrs-stream-processing-apache-kafka-whats-connection/) and [Event Sourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) Design Patterns with [Kafka](https://kafka.apache.org/) | Build Faster. Build Smarter.  
-- [ ] Integrate Caching ( [Spring Data Redis](https://spring.io/projects/spring-data-redis) ) with [Redis](https://redis.io/)
-- [ ] Design [Load Balancing with NGINX and Consul Template](https://learn.hashicorp.com/tutorials/consul/load-balancing-nginx?in=consul/integrations)
-- [ ] Integrate [Graph Visualization](https://github.com/lyes-s/graph-visualization)
-- [ ] Secure Network Device Inventory & Graph Services with [Keycloak](https://www.keycloak.org/)
-- [ ] Integrate [Zipkin](https://zipkin.io/) & [Spring Cloud Sleuth](https://spring.io/projects/spring-cloud-sleuth) as distributed tracing system
-- [ ] Centralize logging with [ELK Stack](https://www.elastic.co/elastic-stack/)
-- [ ] Deploy to [Kubernetes](https://kubernetes.io/)
-
 # Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
